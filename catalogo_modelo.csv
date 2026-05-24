@@ -1,0 +1,36 @@
+id,nome,categoria,descricao,preco,imagem,disponivel,destaque
+1,Kitzinho,Kit,Mini kit Brisaria para experimentar. Tabaco + seda + piteira.,12.00,,TRUE,FALSE
+2,Kit Tabas,Kit,"Kit essencial: tabaco + seda + piteira. Tudo que você precisa.",30.00,images/kit.jpeg,TRUE,TRUE
+3,Kit Completo,Kit,"Kit completo Brisaria: tabaco + seda + piteira + dichavador + cuia.",45.00,,TRUE,FALSE
+4,Kit Tabas 2.0,Kit,"Kit Tabas premium com acessórios selecionados. O próximo nível.",60.00,,TRUE,FALSE
+5,Kit Tabas 4.0,Kit,"Kit top da Brisaria com tudo de melhor. Presentão de verdade.",110.00,images/kit_premium.jpeg,TRUE,TRUE
+6,Hi Tabaco 25g,Tabaco,"Blend especial com aroma diferenciado e fumaça suave. 25g.",28.00,,TRUE,FALSE
+7,Tabaco Amsterdam 25g,Tabaco,"Blend suave e aromático, ideal para quem curte um cigarro levinho. 25g.",18.00,,TRUE,TRUE
+8,Tabaco Acrema 20g,Tabaco,Tabaco nacional com sabor único e encorpado. 20g.,18.00,,TRUE,FALSE
+9,Seda King Size,Seda,"King size brown, papel fino e queima uniforme. 3 por R$10.",4.00,images/seda_kin.jpeg,TRUE,FALSE
+10,Seda Bem Bolado,Seda,Brown slim ultrafina da Bem Bolado. Top de linha. 3 por R$12.,5.00,,TRUE,TRUE
+11,Seda Smoking,Seda,"King size brown Smoking, ícone das sedas artesanais. 3 por R$15.",6.00,images/seda_smoking.jpeg,TRUE,FALSE
+12,Seda Sadhu Ultra Longa,Seda,"Ultra longa Sadhu, queima lenta e saborosa. 3 por R$12.",5.00,,TRUE,FALSE
+13,Sedinha Sadhu,Seda,Sedinha Sadhu slim ultrafina. Fácil de rolar. 3 por R$10.,4.00,,TRUE,FALSE
+14,Filtro Aleda Extra Longo,Filtro,Filtro extra longo de papel para cigarro artesanal. Filtração superior.,8.00,,TRUE,FALSE
+15,Piteira Tonabê Mega Longa,Piteira,Artesanal de madeira Tonabê mega longa. Filtra e esfria com elegância.,7.00,images/piteira_tonabe.jpeg,TRUE,TRUE
+16,Piteira Tonabê Longa,Piteira,Madeira Tonabê versão longa. Artesanal e resistente.,6.00,images/piteira2.jpeg,TRUE,FALSE
+17,Piteira Sadhu Large,Piteira,"Bambu natural Sadhu, leve e resistente. Artesanal e sustentável.",5.00,images/piteira.jpeg,TRUE,FALSE
+18,Piteira de Vidro,Piteira,"Vidro transparente, fácil de limpar e muito estilosa.",8.00,,TRUE,FALSE
+19,Cuia Colorida,Cuia,Cuia colorida de alta qualidade para seus rituais especiais.,16.00,,TRUE,FALSE
+20,Cuia Spa Abduzido,Cuia,"Design exclusivo da Abduzido. Funcional, moderna e estilosa.",20.00,images/cuia.jpeg,TRUE,TRUE
+21,Tesoura Passarinho,Tesoura,"Tesoura passarinho compacta, ideal para triturar com cuidado.",16.00,,TRUE,FALSE
+22,Tesoura Dobrável Tonabê,Tesoura,"Tesoura dobrável artesanal Tonabê, corte preciso e acabamento premium.",16.00,,TRUE,FALSE
+23,Slick Tonabê 5ml,Slick,"Slick de silicone Tonabê, 5ml. Ideal para guardar sua brisa.",16.00,,TRUE,FALSE
+24,Slick Lego 26ml,Slick,"Slick com tampa no estilo Lego, 26ml. Divertido e funcional.",25.00,,TRUE,FALSE
+25,Dichavador Sadhu Peq.,Dichavador,"Sadhu plástico pequeno, leve e prático para o dia a dia.",20.00,,TRUE,FALSE
+26,Dichavador Lion Rolling,Dichavador,"Design de cogumelo, Lion Rolling Circus. Único e resistente.",40.00,,TRUE,FALSE
+27,Dichavador Metal 4 Partes,Dichavador,"Metal compacto, 4 partes. Ótimo para levar na bolsa.",30.00,,TRUE,FALSE
+28,Dichavador Colmeia Peq.,Dichavador,Colmeia plástico pequeno. Custo-benefício imbatível.,30.00,,TRUE,FALSE
+29,Dichavador Colmeia Grande,Dichavador,"Colmeia grande de metal, corte preciso e durável.",40.00,,TRUE,FALSE
+30,Dichavador Colmeia Metal,Dichavador,"Metal premium com design de colmeia, 4 partes com coador.",120.00,images/dichavador.jpeg,TRUE,FALSE
+31,Case Colmeia,Dichavador,Case para dichavador colmeia. Proteção e estilo.,30.00,,FALSE,FALSE
+32,Clipper,Isqueiro,Isqueiro Clipper recarregável. Cores sortidas.,10.00,images/clipper.jpeg,TRUE,FALSE
+33,Bandeja Sadhu,Bandeja,Bandeja Sadhu de qualidade premium para organizar seus acessórios.,35.00,,TRUE,FALSE
+34,Pilão Folha Chaveiro,Acessório,"Mini pilão chaveiro com detalhe de folha, compacto e estiloso.",16.00,,TRUE,FALSE
+35,Tubeck,Acessório,Tubeck — acessório prático para completar o ritual.,10.00,,TRUE,FALSE

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Brisaria — Tabacos, sedas, piteiras, cuias e acessórios para o seu ritual.">
+  <title>Brisaria</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header class="header" id="header">
+    <div class="container header-inner">
+      <a href="#" class="logo">
+        <span class="logo-icon">🌿</span>
+        <span class="logo-text">Brisaria</span>
+      </a>
+      <nav class="header-nav">
+        <a href="#catalogo">Catálogo</a>
+        <a href="#fidelidade">Clube da Brisa</a>
+      </nav>
+      <button class="cart-btn" id="cartBtn" aria-label="Abrir sacola">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 01-8 0"/>
+        </svg>
+        <span class="cart-badge hidden" id="cartBadge">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <div class="hero-bg-circle hero-bg-circle--1"></div>
+    <div class="hero-bg-circle hero-bg-circle--2"></div>
+    <div class="container hero-inner">
+      <div class="hero-content">
+        <span class="hero-tag">✦ Entrega na sua cidade</span>
+        <h1 class="hero-title">Tudo para<br>o seu ritual</h1>
+        <p class="hero-subtitle">Tabacos selecionados, sedas premium, piteiras artesanais e acessórios para briseiros de verdade.</p>
+        <div class="hero-actions">
+          <a href="#catalogo" class="btn btn-gold">Ver catálogo</a>
+          <a href="#fidelidade" class="btn btn-ghost">Clube da Brisa</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== DESTAQUES ===== -->
+  <section class="highlights-bar">
+    <div class="container">
+      <div class="highlights-grid">
+        <div class="highlight-item">
+          <span class="highlight-icon">🚚</span>
+          <div>
+            <strong>Entrega rápida</strong>
+            <p>Pedidos via WhatsApp</p>
+          </div>
+        </div>
+        <div class="highlight-item">
+          <span class="highlight-icon">✅</span>
+          <div>
+            <strong>Produtos selecionados</strong>
+            <p>Qualidade garantida</p>
+          </div>
+        </div>
+        <div class="highlight-item">
+          <span class="highlight-icon">🌿</span>
+          <div>
+            <strong>Clube da Brisa</strong>
+            <p>Acumule pontos</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== MAIS PEDIDOS ===== -->
+  <section class="featured-section">
+    <div class="container">
+      <div class="featured-header">
+        <div>
+          <h2 class="section-title">Mais pedidos</h2>
+          <p class="section-sub">Os favoritos da galera</p>
+        </div>
+        <a href="#catalogo" class="btn btn-outline-dark btn-sm">Ver catálogo completo</a>
+      </div>
+      <div class="featured-grid" id="featuredGrid"></div>
+    </div>
+  </section>
+
+  <!-- ===== CATALOG ===== -->
+  <section id="catalogo" class="catalog-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Catálogo</h2>
+        <p class="section-sub">Escolha seus produtos e monte sua sacola</p>
+      </div>
+
+      <div class="catalog-toolbar">
+        <div class="search-box">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+          </svg>
+          <input type="text" id="searchInput" placeholder="Buscar produto...">
+        </div>
+        <div class="category-filters" id="categoryFilters">
+          <button class="filter-chip active" data-category="todos">Todos</button>
+        </div>
+      </div>
+
+      <div class="loading-state" id="loadingState">
+        <div class="spinner"></div>
+        <p>Carregando produtos...</p>
+      </div>
+
+      <div class="error-state hidden" id="errorState">
+        <p>⚠️ Erro ao carregar catálogo. Verifique as configurações.</p>
+      </div>
+
+      <div class="products-grid" id="productsGrid"></div>
+
+      <div class="empty-state hidden" id="emptyState">
+        <p>😕 Nenhum produto encontrado para essa busca.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CART OVERLAY + SIDEBAR ===== -->
+  <div class="cart-overlay" id="cartOverlay"></div>
+
+  <aside class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header">
+      <h3>Sua sacola 🛍️</h3>
+      <button class="close-btn" id="closeCart" aria-label="Fechar sacola">✕</button>
+    </div>
+    <div class="cart-items" id="cartItems">
+      <!-- preenchido por JS -->
+    </div>
+    <div class="cart-footer" id="cartFooter">
+      <div class="cart-summary">
+        <div class="cart-total-row">
+          <span>Total do pedido</span>
+          <span class="cart-total-val" id="cartTotal">R$ 0,00</span>
+        </div>
+      </div>
+      <button class="btn-whatsapp" id="checkoutBtn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+        </svg>
+        Finalizar no WhatsApp
+      </button>
+    </div>
+  </aside>
+
+  <!-- ===== CLUBE DA BRISA ===== -->
+  <section id="fidelidade" class="loyalty-section">
+    <div class="container">
+      <div class="loyalty-inner">
+
+        <div class="loyalty-info">
+          <span class="loyalty-badge">🌿 Clube da Brisa</span>
+          <h2 class="section-title">Cada compra<br>vale pontos</h2>
+          <p>Acumule pontos a cada compra e troque por produtos. É simples: compra, acumula, resgata.</p>
+
+          <div class="loyalty-tables">
+            <div class="loyalty-table">
+              <h4 class="loyalty-table-title">🌿 Como ganhar pontos</h4>
+              <ul class="loyalty-benefits">
+                <li><span class="benefit-icon">✦</span><span>A cada <strong>R$15</strong> em compras = <strong>1 ponto</strong></span></li>
+                <li><span class="benefit-icon">✦</span><span>Kitzinho = <strong>1 ponto</strong></span></li>
+                <li><span class="benefit-icon">✦</span><span>Kit Tabas = <strong>4 pontos</strong></span></li>
+                <li><span class="benefit-icon">✦</span><span>Kit Completo = <strong>6 pontos</strong></span></li>
+                <li><span class="benefit-icon">✦</span><span>Kit Tabas 2.0 = <strong>7 pontos</strong></span></li>
+                <li><span class="benefit-icon">✦</span><span>Kit Tabas 4.0 = <strong>10 pontos</strong></span></li>
+              </ul>
+            </div>
+            <div class="loyalty-table">
+              <h4 class="loyalty-table-title">🎁 Como resgatar</h4>
+              <ul class="loyalty-benefits">
+                <li><span class="benefit-icon">✦</span><span><strong>5 pontos</strong> → sedinha ou filtro</span></li>
+                <li><span class="benefit-icon">✦</span><span><strong>7 pontos</strong> → Kitzinho</span></li>
+                <li><span class="benefit-icon">✦</span><span><strong>10 pontos</strong> → Kit Tabas</span></li>
+                <li><span class="benefit-icon">✦</span><span><strong>12 pontos</strong> → acessório surpresa</span></li>
+                <li><span class="benefit-icon">✦</span><span><strong>15 pontos</strong> → Kit Completo</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="loyalty-form-card">
+          <h3>Quero fazer parte</h3>
+
+          <form id="loyaltyForm" novalidate>
+            <div class="form-group">
+              <label for="loyaltyName">Nome completo</label>
+              <input type="text" id="loyaltyName" name="nome" placeholder="Seu nome" required autocomplete="name">
+            </div>
+            <div class="form-group">
+              <label for="loyaltyPhone">WhatsApp</label>
+              <input type="tel" id="loyaltyPhone" name="whatsapp" placeholder="(XX) XXXXX-XXXX" required autocomplete="tel">
+            </div>
+            <div class="form-group">
+              <label for="loyaltyEmail">E-mail <span class="optional">(opcional)</span></label>
+              <input type="email" id="loyaltyEmail" name="email" placeholder="seu@email.com" autocomplete="email">
+            </div>
+            <div class="form-group">
+              <label for="loyaltyBirth">Data de nascimento <span class="optional">(opcional)</span></label>
+              <input type="date" id="loyaltyBirth" name="nascimento">
+            </div>
+            <button type="submit" class="btn btn-verde btn-full" id="loyaltySubmitBtn">
+              Cadastrar no Clube
+            </button>
+            <p class="form-disclaimer">Seus dados são usados apenas para o Clube da Brisa.</p>
+          </form>
+
+          <div class="form-success hidden" id="loyaltySuccess">
+            <div class="success-icon">🎉</div>
+            <h4>Bem-vindo ao Clube da Brisa!</h4>
+            <p>Seu cadastro foi realizado. Na próxima compra já começa a acumular pontos!</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="logo-icon">🌿</span>
+        <span class="logo-text">Brisaria</span>
+      </div>
+      <p class="footer-tagline">Seu ritual, nossa paixão.</p>
+      <div class="footer-links">
+        <a href="#catalogo">Catálogo</a>
+        <a href="#fidelidade">Clube da Brisa</a>
+        <a id="footerWhatsapp" href="#" target="_blank" rel="noopener">WhatsApp</a>
+        <a href="https://instagram.com/brisaria_" target="_blank" rel="noopener">@brisaria_</a>
+      </div>
+      <div class="footer-contact">
+        <span>📧 brisaria.tabacaria@gmail.com</span>
+        <span>💠 PIX: brisaria.tabacaria@gmail.com</span>
+      </div>
+      <p class="footer-copy">© 2025 Brisaria. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+  <!-- Toast notification -->
+  <div class="toast" id="toast"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
