@@ -27,6 +27,11 @@ const CONFIG = {
     email:      'entry.1869073504',
     nascimento: 'entry.806306353',
   },
+
+  /* Clube da Brisa — URL do Apps Script Web App para consulta de pontos
+     Deixe em branco até implantar o Apps Script como web app.
+     Depois: cole a URL aqui (formato: https://script.google.com/macros/s/.../exec) */
+  pontosApiUrl: '',
 };
 
 /* ─────────────────────────────────────────────
@@ -117,6 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupHeader();
   setupEventListeners();
   setupLoyaltyForm();
+  setupPontosConsulta();
   updateFooterLinks();
   loadCatalog();
   renderCart();
@@ -558,6 +564,72 @@ function setupLoyaltyForm() {
       showToast('⚠️ Erro ao cadastrar. Tente novamente.');
     }
   });
+}
+
+/* ─────────────────────────────────────────────
+   CLUBE DA BRISA — consulta de pontos
+   ───────────────────────────────────────────── */
+function setupPontosConsulta() {
+  const section = document.getElementById('pontosConsultaSection');
+  if (!section) return;
+
+  /* Só mostra a seção se a URL da API estiver configurada */
+  if (!CONFIG.pontosApiUrl || CONFIG.pontosApiUrl.trim() === '') {
+    section.style.display = 'none';
+    return;
+  }
+  section.style.display = '';
+}
+
+async function consultarPontos() {
+  const input  = document.getElementById('pontosWhatsApp');
+  const btn    = document.getElementById('pontosConsultarBtn');
+  const result = document.getElementById('pontosResult');
+  const wNum   = (input.value || '').replace(/\D/g, '');
+
+  if (!wNum || wNum.length < 8) {
+    input.classList.add('error');
+    return;
+  }
+  input.classList.remove('error');
+
+  btn.textContent = 'Consultando...';
+  btn.disabled    = true;
+  result.classList.add('hidden');
+  result.innerHTML = '';
+
+  try {
+    const res  = await fetch(`${CONFIG.pontosApiUrl}?w=${wNum}`);
+    const data = await res.json();
+
+    if (data.erro) {
+      result.innerHTML = `<p class="pontos-erro">⚠️ ${escHtml(data.erro)}</p>`;
+    } else {
+      const resgatesHtml = (data.resgates_disponiveis && data.resgates_disponiveis.length)
+        ? `<ul class="resgates-list">${data.resgates_disponiveis.map(r =>
+            `<li><span class="benefit-icon">✦</span>${r.pontos} pts → <strong>${escHtml(r.descricao)}</strong></li>`
+          ).join('')}</ul>`
+        : `<p class="resgates-empty">Continue comprando para chegar lá 🌿</p>`;
+
+      result.innerHTML = `
+        <p class="pontos-nome">Olá, <strong>${escHtml(data.nome)}</strong>! 🌿</p>
+        <div class="pontos-saldo-box">
+          <span class="pontos-saldo-num">${data.saldo}</span>
+          <span class="pontos-saldo-label">pontos</span>
+        </div>
+        <p class="pontos-detalhe">Ganhos: ${data.pontos_ganhos} · Resgatados: ${data.pontos_resgatados}</p>
+        ${data.saldo > 0
+          ? `<div class="pontos-resgates"><p class="resgates-title">Disponível para resgatar:</p>${resgatesHtml}</div>`
+          : resgatesHtml}
+        <p class="pontos-rodape">Para resgatar, fale com a gente no WhatsApp 💬</p>`;
+    }
+  } catch (err) {
+    result.innerHTML = `<p class="pontos-erro">⚠️ Erro de conexão. Tente novamente.</p>`;
+  }
+
+  result.classList.remove('hidden');
+  btn.textContent = 'Consultar pontos';
+  btn.disabled    = false;
 }
 
 /* ─────────────────────────────────────────────

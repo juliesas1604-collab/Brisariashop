@@ -224,6 +224,24 @@
             <h4>Bem-vindo ao Clube da Brisa!</h4>
             <p>Seu cadastro foi realizado. Na próxima compra já começa a acumular pontos!</p>
           </div>
+
+          <!-- Consulta de pontos (aparece quando pontosApiUrl está configurado) -->
+          <div id="pontosConsultaSection" class="pontos-consulta-section">
+            <div class="pontos-divider">
+              <span>Já é membro?</span>
+            </div>
+            <h4 class="pontos-consulta-title">Consulte seus pontos</h4>
+            <div class="form-group">
+              <label for="pontosWhatsApp">Seu WhatsApp</label>
+              <input type="tel" id="pontosWhatsApp" placeholder="(XX) XXXXX-XXXX"
+                     onkeydown="if(event.key==='Enter') consultarPontos()">
+            </div>
+            <button type="button" class="btn btn-verde btn-full" id="pontosConsultarBtn"
+                    onclick="consultarPontos()">
+              Consultar pontos
+            </button>
+            <div id="pontosResult" class="pontos-result hidden"></div>
+          </div>
         </div>
 
       </div>
