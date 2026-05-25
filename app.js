@@ -20,12 +20,12 @@ const CONFIG = {
 
   /* Clube da Brisa — Google Forms (opcional):
      Se não configurar, o cadastro é enviado pelo WhatsApp automaticamente */
-  formId: 'YOUR_GOOGLE_FORM_ID',
+  formId: '1FAIpQLSc2W68JOQ0fBGMwYmCF-FfgrhwuPWUuA5ddFWxie7E5SivK9g',
   formFields: {
-    nome:       'entry.0000000001',
-    whatsapp:   'entry.0000000002',
-    email:      'entry.0000000003',
-    nascimento: 'entry.0000000004',
+    nome:       'entry.1702694103',
+    whatsapp:   'entry.1422279347',
+    email:      'entry.1869073504',
+    nascimento: 'entry.806306353',
   },
 };
 
@@ -527,7 +527,7 @@ function setupLoyaltyForm() {
         body.append(CONFIG.formFields.email,      email);
         body.append(CONFIG.formFields.nascimento, nasc);
 
-        await fetch(`https://docs.google.com/forms/d/${CONFIG.formId}/formResponse`, {
+        await fetch(`https://docs.google.com/forms/d/e/${CONFIG.formId}/formResponse`, {
           method: 'POST',
           mode:   'no-cors',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
