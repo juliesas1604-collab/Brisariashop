@@ -25,8 +25,8 @@ const SAMPLE_PRODUCTS = [
   { id: '1',  nome: 'Kitzinho',                  categoria: 'Kit',        descricao: 'Mini kit Brisaria para experimentar. 2 sedinhas Bem Bolado + piteira Sadhu large.',    preco: 12.00,  imagem: 'images/catalogo/kit_kitzinho.jpg',   disponivel: true,  destaque: false },
   { id: '2',  nome: 'Kit Tabas',                 categoria: 'Kit',        descricao: '1 tabaco + 1 filtro Aleda + 2 sedinhas Sadhu. Tudo que você precisa.',                  preco: 30.00,  imagem: 'images/produtos/kit_tabas.jpeg',       disponivel: true,  destaque: true  },
   { id: '3',  nome: 'Kit Completo',              categoria: 'Kit',        descricao: '1 tabaco + 2 sedinhas Bem Bolado + 1 filtro Aleda + 1 piteira Sadhu + 3 sedinhas.',    preco: 45.00,  imagem: 'images/produtos/kit_completo.png',   disponivel: true,  destaque: false },
-  { id: '37', nome: 'Kit Premium',               categoria: 'Kit',        descricao: 'Kit premium Brisaria. Perfeito para presentear.',                                       preco: 45.00,  imagem: 'images/produtos/kit_tabas_premium.jpeg', disponivel: true,  destaque: false },
-  { id: '4',  nome: 'Kit Tabas 2.0',             categoria: 'Kit',        descricao: '2 tabacos + 2 filtros Aleda + 6 sedinhas Guru Spirit Slim ou Large.',                  preco: 60.00,  imagem: 'images/catalogo2/p12.jpg',            disponivel: true,  destaque: false },
+  { id: '37', nome: 'Kit Premium',              categoria: 'Kit',        descricao: 'Kit premium Brisaria. Perfeito para presentear.',                                         preco: 45.00,  imagem: 'images/produtos/kit_tabas_premium.jpeg', disponivel: true,  destaque: false },
+  { id: '4',  nome: 'Kit Tabas 2.0',             categoria: 'Kit',        descricao: '2 tabacos + 2 filtros Aleda + 6 sedinhas Guru Spirit Slim ou Large.',              preco: 60.00,  imagem: 'images/catalogo2/p12.jpg',            disponivel: true,  destaque: false },
   { id: '5',  nome: 'Kit Tabas 4.0',             categoria: 'Kit',        descricao: '4 tabacos + 4 filtros Aleda + 12 sedinhas Guru Spirit. O kit definitivo.',             preco: 110.00, imagem: 'images/catalogo2/p13.jpg',            disponivel: true,  destaque: true  },
   // ── TABACO ──
   { id: '6',  nome: 'Hi Tabaco 25g',             categoria: 'Tabaco',     descricao: 'Blend especial com aroma diferenciado e fumaça suave. 25g.',                           preco: 28.00,  imagem: 'images/catalogo/tabacos.jpg',         disponivel: false, destaque: false },
@@ -64,12 +64,13 @@ const SAMPLE_PRODUCTS = [
   { id: '31', nome: 'Case Colmeia',              categoria: 'Dichavador', descricao: 'Case estofado para dichavador colmeia. Proteção e estilo. Esgotado.',                  preco: 30.00,  imagem: 'images/catalogo/case_colmeia.jpg',    disponivel: false, destaque: false },
   // ── ISQUEIRO ──
   { id: '32', nome: 'Clipper',                   categoria: 'Isqueiro',   descricao: 'Isqueiro Clipper recarregável. Cores sortidas.',                                       preco: 10.00,  imagem: 'images/produtos/clipper.jpeg',         disponivel: true,  destaque: false },
-  { id: '36', nome: 'Bic',                       categoria: 'Isqueiro',   descricao: 'Isqueiro Bic clássico. Cores sortidas.',                                               preco: 10.00,  imagem: 'images/produtos/bic.png',             disponivel: true,  destaque: false },
+  { id: '36', nome: 'Bic',                       categoria: 'Isqueiro',   descricao: 'Isqueiro Bic clássico. Cores sortidas.',                                               preco: 10.00,  imagem: 'images/produtos/bic.png',            disponivel: true,  destaque: false },
   // ── BANDEJA ──
   { id: '33', nome: 'Bandeja Sadhu',             categoria: 'Bandeja',    descricao: 'Bandeja Sadhu com arte exclusiva. Perfeita para organizar o ritual.',                  preco: 35.00,  imagem: 'images/catalogo/bandeja_sadhu.jpg',   disponivel: false, destaque: false },
   // ── ACESSÓRIO ──
   { id: '34', nome: 'Pilão Folha Chaveiro',      categoria: 'Acessório',  descricao: 'Mini pilão chaveiro com detalhe de folha. Compacto e estiloso.',                      preco: 16.00,  imagem: 'images/catalogo2/p30.jpg',            disponivel: true,  destaque: false },
   { id: '35', nome: 'Tubeck',                    categoria: 'Acessório',  descricao: 'Tubeck porta-cigarro. Prático para levar sem amassar.',                               preco: 10.00,  imagem: 'images/catalogo2/p31.jpg',            disponivel: true,  destaque: false },
+  { id: '38', nome: 'Porta Bic Brisaria',        categoria: 'Acessório',  descricao: 'Capa para isqueiro Bic com logo Brisaria. Produzida em impressão 3D. Verde menta com logo verde.',  preco: 15.00,  imagem: 'images/produtos/porta_bic.jpg',       disponivel: true,  destaque: true  },
 ];
 
 /* ─────────────────────────────────────────────
@@ -497,6 +498,7 @@ function setupLoyaltyForm() {
     const nasc      = document.getElementById('loyaltyBirth').value;
     const submitBtn = document.getElementById('loyaltySubmitBtn');
 
+    /* Validação básica */
     let valid = true;
     [
       { el: document.getElementById('loyaltyName'),  val: nome },
@@ -512,6 +514,7 @@ function setupLoyaltyForm() {
 
     try {
       if (CONFIG.scriptUrl) {
+        /* Envia cadastro ao Apps Script */
         await fetch(CONFIG.scriptUrl, {
           method: 'POST',
           body: JSON.stringify({
@@ -523,6 +526,7 @@ function setupLoyaltyForm() {
           }),
         });
       } else {
+        /* Fallback: envia cadastro pelo WhatsApp */
         const msg = [
           '🌿 *Cadastro — Clube da Brisa*',
           '',
@@ -535,6 +539,7 @@ function setupLoyaltyForm() {
         window.open(`https://wa.me/${CONFIG.whatsappNumber}?text=${encodeURIComponent(msg)}`, '_blank');
       }
 
+      /* Sucesso */
       form.classList.add('hidden');
       document.getElementById('loyaltySuccess').classList.remove('hidden');
 
@@ -554,6 +559,7 @@ function setupPontosConsulta() {
   const section = document.getElementById('pontosConsultaSection');
   if (!section) return;
 
+  /* Só mostra a seção se o Apps Script estiver configurado */
   if (!CONFIG.scriptUrl) {
     section.style.display = 'none';
     return;
@@ -673,8 +679,8 @@ function renderAccountPanel() {
   loginEl.classList.add('hidden');
   perfilEl.classList.remove('hidden');
   document.getElementById('accountPanelTitle').textContent = 'Olá, ' + clienteLogado.nome.split(' ')[0] + ' 🌿';
-  document.getElementById('perfilNome').textContent   = clienteLogado.nome;
-  document.getElementById('perfilWpp').textContent    = clienteLogado.wpp;
+  document.getElementById('perfilNome').textContent  = clienteLogado.nome;
+  document.getElementById('perfilWpp').textContent   = clienteLogado.wpp;
   document.getElementById('perfilPontos').textContent = clienteLogado.saldo ?? 0;
   renderHistorico(clienteLogado.historico || []);
 }
@@ -704,9 +710,9 @@ function renderHistorico(historico) {
    MINHA CONTA — login / logout
    ───────────────────────────────────────────── */
 async function fazerLogin() {
-  const input  = document.getElementById('loginWhatsApp');
+  const input = document.getElementById('loginWhatsApp');
   const erroEl = document.getElementById('loginErro');
-  const wNum   = normalizarWpp(input.value);
+  const wNum = normalizarWpp(input.value);
 
   erroEl.classList.add('hidden');
 
@@ -724,7 +730,7 @@ async function fazerLogin() {
 
   const btn = document.querySelector('#accountLogin .btn');
   btn.textContent = 'Buscando...';
-  btn.disabled    = true;
+  btn.disabled = true;
 
   try {
     const res  = await fetch(`${CONFIG.scriptUrl}?action=perfil&w=${wNum}`);
@@ -746,7 +752,7 @@ async function fazerLogin() {
   }
 
   btn.textContent = 'Entrar';
-  btn.disabled    = false;
+  btn.disabled = false;
 }
 
 function fazerLogout() {
