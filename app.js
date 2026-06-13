@@ -70,7 +70,7 @@ const SAMPLE_PRODUCTS = [
   // ── ACESSÓRIO ──
   { id: '34', nome: 'Pilão Folha Chaveiro',      categoria: 'Acessório',  descricao: 'Mini pilão chaveiro com detalhe de folha. Compacto e estiloso.',                      preco: 16.00,  imagem: 'images/catalogo2/p30.jpg',            disponivel: true,  destaque: false },
   { id: '35', nome: 'Tubeck',                    categoria: 'Acessório',  descricao: 'Tubeck porta-cigarro. Prático para levar sem amassar.',                               preco: 10.00,  imagem: 'images/catalogo2/p31.jpg',            disponivel: true,  destaque: false },
-  { id: '38', nome: 'Porta Bic Brisaria',        categoria: 'Acessório',  descricao: 'Capa para isqueiro Bic com logo Brisaria. Produzida em impressão 3D. Verde menta com logo verde.',  preco: 15.00,  imagem: 'images/produtos/porta_bic.jpg',       disponivel: true,  destaque: true  },
+  { id: '38', nome: 'Porta Bic Brisaria',        categoria: 'Acessório',  descricao: 'Capa para isqueiro Bic com logo Brisaria. Produzida em impressão 3D. Verde menta com logo verde.',  preco: 15.00,  imagem: 'images/produtos/porta_bic_1.jpg',  imagens: ['images/produtos/porta_bic_1.jpg','images/produtos/porta_bic_2.jpg','images/produtos/porta_bic_3.jpg'],  disponivel: true,  destaque: true  },
 ];
 
 /* ─────────────────────────────────────────────
@@ -204,7 +204,7 @@ function renderFeatured() {
     const placeholder = `<div class="product-img-placeholder" style="display:${p.imagem ? 'none' : 'flex'}">${emoji}</div>`;
 
     return `
-    <div class="product-card" data-id="${escHtml(p.id)}">
+    <div class="product-card" data-id="${escHtml(p.id)}" onclick="openProductModal('${escHtml(p.id)}')">
       <div class="product-img-wrap">
         ${imgTag}${placeholder}
       </div>
@@ -217,7 +217,7 @@ function renderFeatured() {
             ${p.precoCombo ? `<span class="product-combo-tag">3 por R$&nbsp;${formatPrice(p.precoCombo)}</span>` : ''}
           </div>
           <button class="btn-add ${inCart ? 'added' : ''}"
-                  onclick="addToCart('${escHtml(p.id)}')"
+                  onclick="event.stopPropagation(); addToCart('${escHtml(p.id)}')"
                   title="Adicionar à sacola"
                   aria-label="Adicionar ${escHtml(p.nome)} à sacola">
             ${inCart ? '✓' : '+'}
@@ -300,7 +300,7 @@ function renderProducts(products) {
     const badge = p.destaque ? `<span class="product-badge">⭐ Destaque</span>` : '';
 
     return `
-    <div class="product-card" data-id="${escHtml(p.id)}">
+    <div class="product-card" data-id="${escHtml(p.id)}" onclick="openProductModal('${escHtml(p.id)}')">
       <div class="product-img-wrap">
         ${imgTag}${placeholder}${badge}
       </div>
@@ -773,6 +773,106 @@ function showToast(msg) {
   el.classList.add('show');
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => el.classList.remove('show'), 2600);
+}
+
+/* ─────────────────────────────────────────────
+   MODAL DE PRODUTO + CARROSSEL
+   ───────────────────────────────────────────── */
+let _modalProductId = null;
+let _carouselIdx    = 0;
+let _carouselImgs   = [];
+
+function openProductModal(id) {
+  const p = allProducts.find(x => x.id === id);
+  if (!p) return;
+  _modalProductId = id;
+
+  // Monta lista de imagens (suporte a campo 'imagens' array ou 'imagem' único)
+  _carouselImgs = Array.isArray(p.imagens) && p.imagens.length
+    ? p.imagens
+    : p.imagem ? [p.imagem] : [];
+  _carouselIdx = 0;
+
+  // Preenche info
+  document.getElementById('modalCat').textContent   = p.categoria;
+  document.getElementById('modalName').textContent  = p.nome;
+  document.getElementById('modalDesc').textContent  = p.descricao || '';
+  document.getElementById('modalPrice').textContent = `R$ ${formatPrice(p.preco)}`;
+
+  const comboEl = document.getElementById('modalCombo');
+  if (p.precoCombo) {
+    comboEl.textContent = `${p.qtdCombo} por R$ ${formatPrice(p.precoCombo)}`;
+    comboEl.classList.remove('hidden');
+  } else {
+    comboEl.classList.add('hidden');
+  }
+
+  const addBtn = document.getElementById('modalAddBtn');
+  const inCart = cart.some(i => i.id === id);
+  addBtn.textContent = inCart ? '✓' : '+';
+  addBtn.className = 'btn-add' + (inCart ? ' added' : '');
+
+  // Carrossel
+  const track = document.getElementById('carouselTrack');
+  track.innerHTML = _carouselImgs.map(src =>
+    `<img src="${escHtml(src)}" alt="${escHtml(p.nome)}" loading="lazy">`
+  ).join('');
+  track.style.transform = 'translateX(0)';
+
+  // Dots
+  const dots = document.getElementById('carouselDots');
+  dots.innerHTML = _carouselImgs.length > 1
+    ? _carouselImgs.map((_, i) =>
+        `<button class="carousel-dot${i === 0 ? ' active' : ''}" onclick="carouselGoTo(${i})"></button>`
+      ).join('')
+    : '';
+
+  // Esconde setas se só 1 imagem
+  const showArrows = _carouselImgs.length > 1;
+  document.getElementById('carouselPrev').style.display = showArrows ? '' : 'none';
+  document.getElementById('carouselNext').style.display = showArrows ? '' : 'none';
+  _updateCarouselBtns();
+
+  document.getElementById('productModalOverlay').classList.remove('hidden');
+  document.getElementById('productModal').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeProductModal() {
+  document.getElementById('productModalOverlay').classList.add('hidden');
+  document.getElementById('productModal').classList.add('hidden');
+  document.body.style.overflow = '';
+}
+
+function carouselNav(dir) {
+  _carouselIdx = Math.max(0, Math.min(_carouselImgs.length - 1, _carouselIdx + dir));
+  _applyCarousel();
+}
+
+function carouselGoTo(i) {
+  _carouselIdx = i;
+  _applyCarousel();
+}
+
+function _applyCarousel() {
+  document.getElementById('carouselTrack').style.transform = `translateX(-${_carouselIdx * 100}%)`;
+  document.querySelectorAll('.carousel-dot').forEach((d, i) =>
+    d.classList.toggle('active', i === _carouselIdx)
+  );
+  _updateCarouselBtns();
+}
+
+function _updateCarouselBtns() {
+  document.getElementById('carouselPrev').disabled = _carouselIdx === 0;
+  document.getElementById('carouselNext').disabled = _carouselIdx === _carouselImgs.length - 1;
+}
+
+function modalAddToCart() {
+  if (!_modalProductId) return;
+  addToCart(_modalProductId);
+  const btn = document.getElementById('modalAddBtn');
+  btn.textContent = '✓';
+  btn.classList.add('added');
 }
 
 /* ─────────────────────────────────────────────
