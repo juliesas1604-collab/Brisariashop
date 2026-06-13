@@ -83,9 +83,30 @@ function updateFooterLinks() {
 async function loadCatalog() {
   const loading = document.getElementById('loadingState');
   const error   = document.getElementById('errorState');
-  loading.classList.remove('hidden');
+
   error.classList.add('hidden');
 
+  /* Mostra produtos de exemplo imediatamente — sem travar */
+  allProducts = SAMPLE_PRODUCTS;
+  loading.classList.add('hidden');
+  renderFeatured();
+  renderFilters();
+  applyFilters();
+
+  /* Tenta atualizar com dados reais do Sheets em segundo plano */
+  if (!CONFIG.scriptUrl) return;
+  try {
+    const liveData = await fetchFromScript();
+    if (liveData.length) {
+      allProducts = liveData;
+      renderFeatured();
+      renderFilters();
+      applyFilters();
+    }
+  } catch (err) {
+    console.warn('Catálogo ao vivo indisponível, usando dados locais:', err);
+  }
+}
   try {
     if (!CONFIG.scriptUrl) {
       allProducts = SAMPLE_PRODUCTS;
