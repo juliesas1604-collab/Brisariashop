@@ -104,12 +104,23 @@ async function loadCatalog() {
 }
 
 async function fetchFromScript() {
-  const res  = await fetch(`${CONFIG.scriptUrl}?action=catalogo`);
-  const data = await res.json();
-  if (!Array.isArray(data)) throw new Error('Resposta inesperada do servidor');
-  return data.filter(p => p.nome && p.disponivel);
-}
+  const controller = new AbortController();
+  const timeout    = setTimeout(() => controller.abort(), 15000);
 
+  try {
+    const res  = await fetch(`${CONFIG.scriptUrl}?action=catalogo`, {
+      signal: controller.signal,
+    });
+    clearTimeout(timeout);
+    const text = await res.text();
+    const data = JSON.parse(text);
+    if (!Array.isArray(data)) throw new Error('Resposta inesperada');
+    return data.filter(p => p.nome && p.disponivel);
+  } catch (err) {
+    clearTimeout(timeout);
+    throw err;
+  }
+}
 function renderFeatured() {
   const grid = document.getElementById('featuredGrid');
   if (!grid) return;
