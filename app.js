@@ -8,43 +8,43 @@ const CONFIG = {
 };
 
 const SAMPLE_PRODUCTS = [
-  { id: '1',  nome: 'Kitzinho',                  categoria: 'Kit',        descricao: 'Mini kit Brisaria para experimentar. 2 sedinhas Bem Bolado + piteira Sadhu large.',    preco: 12.00,  imagem: 'images/catalogo/kit_kitzinho.jpg',   disponivel: true,  destaque: false },
-  { id: '2',  nome: 'Kit Tabas',                 categoria: 'Kit',        descricao: '1 tabaco + 1 filtro Aleda + 2 sedinhas Sadhu. Tudo que você precisa.',                  preco: 30.00,  imagem: 'images/produtos/kit_tabas.jpeg',       disponivel: true,  destaque: true  },
-  { id: '3',  nome: 'Kit Completo',              categoria: 'Kit',        descricao: '1 tabaco + 2 sedinhas Bem Bolado + 1 filtro Aleda + 1 piteira Sadhu + 3 sedinhas.',    preco: 45.00,  imagem: 'images/produtos/kit_completo.png',   disponivel: true,  destaque: false },
+  { id: '1',  nome: 'Kitzinho',                  categoria: 'Kit',        descricao: 'Mini kit Brisaria para experimentar. 2 sedinhas Bem Bolado + piteira Sadhu large.',    preco: 12.00,  imagem: 'images/catalogo/kit_kitzinho.jpg',      disponivel: true,  destaque: false },
+  { id: '2',  nome: 'Kit Tabas',                 categoria: 'Kit',        descricao: '1 tabaco + 1 filtro Aleda + 2 sedinhas Sadhu. Tudo que você precisa.',                  preco: 30.00,  imagem: 'images/produtos/kit_tabas.jpeg',         disponivel: true,  destaque: true  },
+  { id: '3',  nome: 'Kit Completo',              categoria: 'Kit',        descricao: '1 tabaco + 2 sedinhas Bem Bolado + 1 filtro Aleda + 1 piteira Sadhu + 3 sedinhas.',    preco: 45.00,  imagem: 'images/produtos/kit_completo.png',      disponivel: true,  destaque: false },
   { id: '37', nome: 'Kit Premium',               categoria: 'Kit',        descricao: 'Kit premium Brisaria. Perfeito para presentear.',                                       preco: 45.00,  imagem: 'images/produtos/kit_tabas_premium.jpeg', disponivel: true,  destaque: false },
-  { id: '4',  nome: 'Kit Tabas 2.0',             categoria: 'Kit',        descricao: '2 tabacos + 2 filtros Aleda + 6 sedinhas Guru Spirit Slim ou Large.',                  preco: 60.00,  imagem: 'images/catalogo2/p12.jpg',            disponivel: true,  destaque: false },
-  { id: '5',  nome: 'Kit Tabas 4.0',             categoria: 'Kit',        descricao: '4 tabacos + 4 filtros Aleda + 12 sedinhas Guru Spirit. O kit definitivo.',             preco: 110.00, imagem: 'images/catalogo2/p13.jpg',            disponivel: true,  destaque: true  },
-  { id: '6',  nome: 'Hi Tabaco 25g',             categoria: 'Tabaco',     descricao: 'Blend especial com aroma diferenciado e fumaça suave. 25g.',                           preco: 28.00,  imagem: 'images/catalogo/tabacos.jpg',         disponivel: false, destaque: false },
-  { id: '7',  nome: 'Tabaco Amsterdam 25g',      categoria: 'Tabaco',     descricao: 'Blend suave e aromático, ideal para quem curte um cigarro levinho. 25g.',              preco: 18.00,  imagem: 'images/catalogo2/p07.jpg',            disponivel: true,  destaque: true  },
-  { id: '8',  nome: 'Tabaco Acrema 20g',         categoria: 'Tabaco',     descricao: 'Tabaco nacional com sabor único e encorpado. 20g.',                                    preco: 18.00,  imagem: 'images/catalogo/tabacos.jpg',         disponivel: false, destaque: false },
-  { id: '9',  nome: 'Seda King Size',            categoria: 'Seda',       descricao: 'King size brown, papel fino e queima uniforme. 3 por R$10.',                           preco: 4.00,   imagem: 'images/produtos/seda_king.jpeg',       disponivel: true,  destaque: false },
-  { id: '10', nome: 'Seda Bem Bolado',           categoria: 'Seda',       descricao: 'Brown slim ultrafina da Bem Bolado. Top de linha. 3 por R$12.',                        preco: 5.00,   imagem: 'images/catalogo2/p02.jpg',            disponivel: true,  destaque: true  },
-  { id: '11', nome: 'Seda Smoking',              categoria: 'Seda',       descricao: 'King size brown Smoking, ícone das sedas artesanais. 3 por R$15.',                     preco: 6.00,   imagem: 'images/produtos/seda_smoking.jpeg',    disponivel: true,  destaque: false },
-  { id: '12', nome: 'Seda Sadhu Ultra Longa',    categoria: 'Seda',       descricao: 'Ultra longa Sadhu, queima lenta e saborosa. 3 por R$12.',                              preco: 5.00,   imagem: 'images/catalogo2/p14.jpg',            disponivel: true,  destaque: false },
-  { id: '13', nome: 'Sedinha Sadhu',             categoria: 'Seda',       descricao: 'Sedinha Sadhu slim ultrafina. Fácil de rolar. 3 por R$10.',                            preco: 4.00,   imagem: 'images/catalogo2/p15.jpg',            disponivel: true,  destaque: false },
-  { id: '14', nome: 'Filtro Aleda Extra Longo',  categoria: 'Filtro',     descricao: 'Filtro extra longo Aleda Slim 22mm. 150 unidades. Filtração superior.',                preco: 8.00,   imagem: 'images/catalogo2/p04.jpg',            disponivel: true,  destaque: false },
-  { id: '15', nome: 'Piteira Tonabê Mega Longa', categoria: 'Piteira',    descricao: 'Artesanal de madeira Tonabê mega longa. Filtra e esfria com elegância.',               preco: 7.00,   imagem: 'images/produtos/a_piteira.jpeg',       disponivel: true,  destaque: true  },
-  { id: '16', nome: 'Piteira Tonabê Longa',      categoria: 'Piteira',    descricao: 'Madeira Tonabê versão longa. Artesanal e resistente.',                                 preco: 6.00,   imagem: 'images/produtos/a_piteira_1.jpeg',     disponivel: true,  destaque: false },
-  { id: '17', nome: 'Piteira Sadhu Large',       categoria: 'Piteira',    descricao: 'Bambu natural Sadhu large, 35 tips. Leve, resistente e sustentável.',                  preco: 5.00,   imagem: 'images/produtos/piteira_tonabe.jpeg',  disponivel: true,  destaque: false },
-  { id: '18', nome: 'Piteira de Vidro',          categoria: 'Piteira',    descricao: 'Vidro transparente, fácil de limpar e muito estilosa.',                                preco: 8.00,   imagem: 'images/catalogo/acessorios.jpg',      disponivel: true,  destaque: false },
-  { id: '19', nome: 'Cuia Colorida',             categoria: 'Cuia',       descricao: 'Cuia colorida Tonabê. Cores variadas — consulte disponibilidade.',                     preco: 16.00,  imagem: 'images/catalogo2/p22.jpg',            disponivel: true,  destaque: false },
+  { id: '4',  nome: 'Kit Tabas 2.0',             categoria: 'Kit',        descricao: '2 tabacos + 2 filtros Aleda + 6 sedinhas Guru Spirit Slim ou Large.',                  preco: 60.00,  imagem: 'images/catalogo2/p12.jpg',              disponivel: true,  destaque: false },
+  { id: '5',  nome: 'Kit Tabas 4.0',             categoria: 'Kit',        descricao: '4 tabacos + 4 filtros Aleda + 12 sedinhas Guru Spirit. O kit definitivo.',             preco: 110.00, imagem: 'images/catalogo2/p13.jpg',              disponivel: true,  destaque: true  },
+  { id: '6',  nome: 'Hi Tabaco 25g',             categoria: 'Tabaco',     descricao: 'Blend especial com aroma diferenciado e fumaça suave. 25g.',                           preco: 28.00,  imagem: 'images/catalogo/tabacos.jpg',           disponivel: false, destaque: false },
+  { id: '7',  nome: 'Tabaco Amsterdam 25g',      categoria: 'Tabaco',     descricao: 'Blend suave e aromático, ideal para quem curte um cigarro levinho. 25g.',              preco: 18.00,  imagem: 'images/catalogo2/p07.jpg',              disponivel: true,  destaque: true  },
+  { id: '8',  nome: 'Tabaco Acrema 20g',         categoria: 'Tabaco',     descricao: 'Tabaco nacional com sabor único e encorpado. 20g.',                                    preco: 18.00,  imagem: 'images/catalogo/tabacos.jpg',           disponivel: false, destaque: false },
+  { id: '9',  nome: 'Seda King Size',            categoria: 'Seda',       descricao: 'King size brown, papel fino e queima uniforme.',                                       preco: 4.00,  precoCombo: 10.00, qtdCombo: 3, imagem: 'images/produtos/seda_king.jpeg',        disponivel: true,  destaque: false },
+  { id: '10', nome: 'Seda Bem Bolado',           categoria: 'Seda',       descricao: 'Brown slim ultrafina da Bem Bolado. Top de linha.',                                    preco: 5.00,  precoCombo: 12.00, qtdCombo: 3, imagem: 'images/catalogo2/p02.jpg',              disponivel: true,  destaque: true  },
+  { id: '11', nome: 'Seda Smoking',              categoria: 'Seda',       descricao: 'King size brown Smoking, ícone das sedas artesanais.',                                 preco: 6.00,  precoCombo: 15.00, qtdCombo: 3, imagem: 'images/produtos/seda_smoking.jpeg',     disponivel: true,  destaque: false },
+  { id: '12', nome: 'Seda Sadhu Ultra Longa',    categoria: 'Seda',       descricao: 'Ultra longa Sadhu, queima lenta e saborosa.',                                          preco: 5.00,  precoCombo: 12.00, qtdCombo: 3, imagem: 'images/catalogo2/p14.jpg',              disponivel: true,  destaque: false },
+  { id: '13', nome: 'Sedinha Sadhu',             categoria: 'Seda',       descricao: 'Sedinha Sadhu slim ultrafina. Fácil de rolar.',                                        preco: 4.00,  precoCombo: 10.00, qtdCombo: 3, imagem: 'images/catalogo2/p15.jpg',              disponivel: true,  destaque: false },
+  { id: '14', nome: 'Filtro Aleda Extra Longo',  categoria: 'Filtro',     descricao: 'Filtro extra longo Aleda Slim 22mm. 150 unidades. Filtração superior.',                preco: 8.00,   imagem: 'images/catalogo2/p04.jpg',              disponivel: true,  destaque: false },
+  { id: '15', nome: 'Piteira Tonabê Mega Longa', categoria: 'Piteira',    descricao: 'Artesanal de madeira Tonabê mega longa. Filtra e esfria com elegância.',               preco: 7.00,   imagem: 'images/produtos/a_piteira.jpeg',         disponivel: true,  destaque: true  },
+  { id: '16', nome: 'Piteira Tonabê Longa',      categoria: 'Piteira',    descricao: 'Madeira Tonabê versão longa. Artesanal e resistente.',                                 preco: 6.00,   imagem: 'images/produtos/a_piteira_1.jpeg',       disponivel: true,  destaque: false },
+  { id: '17', nome: 'Piteira Sadhu Large',       categoria: 'Piteira',    descricao: 'Bambu natural Sadhu large, 35 tips. Leve, resistente e sustentável.',                  preco: 5.00,   imagem: 'images/produtos/piteira_tonabe.jpeg',    disponivel: true,  destaque: false },
+  { id: '18', nome: 'Piteira de Vidro',          categoria: 'Piteira',    descricao: 'Vidro transparente, fácil de limpar e muito estilosa.',                                preco: 8.00,   imagem: 'images/catalogo/acessorios.jpg',         disponivel: true,  destaque: false },
+  { id: '19', nome: 'Cuia Colorida',             categoria: 'Cuia',       descricao: 'Cuia colorida Tonabê. Cores variadas — consulte disponibilidade.',                     preco: 16.00,  imagem: 'images/catalogo2/p22.jpg',              disponivel: true,  destaque: false },
   { id: '20', nome: 'Cuia Spa Abduzido',         categoria: 'Cuia',       descricao: 'Cuia spa da Abduzido. Design exclusivo em cores vibrantes.',                           preco: 20.00,  imagem: 'images/produtos/cuia_spa_abduzido.jpeg', disponivel: true,  destaque: true  },
-  { id: '21', nome: 'Tesoura Passarinho',        categoria: 'Tesoura',    descricao: 'Tesoura passarinho. Rosa/dourado ou furta-cor. Corte preciso.',                        preco: 16.00,  imagem: 'images/catalogo2/p17.jpg',            disponivel: true,  destaque: false },
-  { id: '22', nome: 'Tesoura Dobrável Tonabê',   categoria: 'Tesoura',    descricao: 'Tesoura dobrável Tonabê. Cores variadas. Prática e compacta.',                         preco: 16.00,  imagem: 'images/catalogo2/p18.jpg',            disponivel: true,  destaque: false },
-  { id: '23', nome: 'Slick Tonabê 5ml',          categoria: 'Slick',      descricao: 'Slick de silicone Tonabê, 5ml. Ideal para guardar sua brisa.',                        preco: 16.00,  imagem: 'images/catalogo2/p20.jpg',            disponivel: true,  destaque: false },
-  { id: '24', nome: 'Slick Lego 26ml',           categoria: 'Slick',      descricao: 'Slick com tampa no estilo Lego, 26ml. Divertido e funcional.',                         preco: 25.00,  imagem: 'images/catalogo2/p21.jpg',            disponivel: true,  destaque: false },
-  { id: '25', nome: 'Dichavador Sadhu Peq.',     categoria: 'Dichavador', descricao: 'Sadhu plástico pequeno flor. Leve e prático para o dia a dia.',                       preco: 20.00,  imagem: 'images/produtos/dichavas_colmeia.jpeg', disponivel: true,  destaque: false },
-  { id: '26', nome: 'Dichavador Lion Rolling',   categoria: 'Dichavador', descricao: 'Lion Rolling Circus. Design exclusivo, resistente e compacto.',                        preco: 40.00,  imagem: 'images/catalogo2/p25.jpg',            disponivel: true,  destaque: false },
-  { id: '27', nome: 'Dichavador Metal 4 Partes', categoria: 'Dichavador', descricao: 'Metal compacto, 4 partes. Estampas variadas. Ótimo para levar na bolsa.',              preco: 30.00,  imagem: 'images/catalogo2/p26.jpg',            disponivel: true,  destaque: false },
-  { id: '28', nome: 'Dichavador Colmeia Peq.',   categoria: 'Dichavador', descricao: 'Colmeia plástico pequeno. Custo-benefício imbatível.',                                 preco: 30.00,  imagem: 'images/produtos/dich_colmeia.jpeg',    disponivel: true,  destaque: false },
-  { id: '29', nome: 'Dichavador Colmeia Grande', categoria: 'Dichavador', descricao: 'Colmeia grande. Corte preciso e durável.',                                             preco: 40.00,  imagem: 'images/produtos/dicha_colme.jpeg',    disponivel: true,  destaque: false },
-  { id: '30', nome: 'Dichavador Colmeia Metal',  categoria: 'Dichavador', descricao: 'Alien Dawg — metal premium colmeia, 4 partes com coador. Edição especial.',            preco: 120.00, imagem: 'images/catalogo2/p27.jpg',            disponivel: true,  destaque: false },
-  { id: '31', nome: 'Case Colmeia',              categoria: 'Dichavador', descricao: 'Case estofado para dichavador colmeia. Proteção e estilo. Esgotado.',                  preco: 30.00,  imagem: 'images/catalogo/case_colmeia.jpg',    disponivel: false, destaque: false },
-  { id: '32', nome: 'Clipper',                   categoria: 'Isqueiro',   descricao: 'Isqueiro Clipper recarregável. Cores sortidas.',                                       preco: 10.00,  imagem: 'images/produtos/clipper.jpeg',         disponivel: true,  destaque: false },
-  { id: '36', nome: 'Bic',                       categoria: 'Isqueiro',   descricao: 'Isqueiro Bic clássico. Cores sortidas.',                                               preco: 10.00,  imagem: 'images/produtos/bic.png',             disponivel: true,  destaque: false },
-  { id: '33', nome: 'Bandeja Sadhu',             categoria: 'Bandeja',    descricao: 'Bandeja Sadhu com arte exclusiva. Perfeita para organizar o ritual.',                  preco: 35.00,  imagem: 'images/catalogo/bandeja_sadhu.jpg',   disponivel: false, destaque: false },
-  { id: '34', nome: 'Pilão Folha Chaveiro',      categoria: 'Acessório',  descricao: 'Mini pilão chaveiro com detalhe de folha. Compacto e estiloso.',                      preco: 16.00,  imagem: 'images/catalogo2/p30.jpg',            disponivel: true,  destaque: false },
-  { id: '35', nome: 'Tubeck',                    categoria: 'Acessório',  descricao: 'Tubeck porta-cigarro. Prático para levar sem amassar.',                               preco: 10.00,  imagem: 'images/catalogo2/p31.jpg',            disponivel: true,  destaque: false },
+  { id: '21', nome: 'Tesoura Passarinho',        categoria: 'Tesoura',    descricao: 'Tesoura passarinho. Rosa/dourado ou furta-cor. Corte preciso.',                        preco: 16.00,  imagem: 'images/catalogo2/p17.jpg',              disponivel: true,  destaque: false },
+  { id: '22', nome: 'Tesoura Dobrável Tonabê',   categoria: 'Tesoura',    descricao: 'Tesoura dobrável Tonabê. Cores variadas. Prática e compacta.',                         preco: 16.00,  imagem: 'images/catalogo2/p18.jpg',              disponivel: true,  destaque: false },
+  { id: '23', nome: 'Slick Tonabê 5ml',          categoria: 'Slick',      descricao: 'Slick de silicone Tonabê, 5ml. Ideal para guardar sua brisa.',                        preco: 16.00,  imagem: 'images/catalogo2/p20.jpg',              disponivel: true,  destaque: false },
+  { id: '24', nome: 'Slick Lego 26ml',           categoria: 'Slick',      descricao: 'Slick com tampa no estilo Lego, 26ml. Divertido e funcional.',                         preco: 25.00,  imagem: 'images/catalogo2/p21.jpg',              disponivel: true,  destaque: false },
+  { id: '25', nome: 'Dichavador Sadhu Peq.',     categoria: 'Dichavador', descricao: 'Sadhu plástico pequeno flor. Leve e prático para o dia a dia.',                       preco: 20.00,  imagem: 'images/produtos/dichavas_colmeia.jpeg',  disponivel: true,  destaque: false },
+  { id: '26', nome: 'Dichavador Lion Rolling',   categoria: 'Dichavador', descricao: 'Lion Rolling Circus. Design exclusivo, resistente e compacto.',                        preco: 40.00,  imagem: 'images/catalogo2/p25.jpg',              disponivel: true,  destaque: false },
+  { id: '27', nome: 'Dichavador Metal 4 Partes', categoria: 'Dichavador', descricao: 'Metal compacto, 4 partes. Estampas variadas. Ótimo para levar na bolsa.',              preco: 30.00,  imagem: 'images/catalogo2/p26.jpg',              disponivel: true,  destaque: false },
+  { id: '28', nome: 'Dichavador Colmeia Peq.',   categoria: 'Dichavador', descricao: 'Colmeia plástico pequeno. Custo-benefício imbatível.',                                 preco: 30.00,  imagem: 'images/produtos/dich_colmeia.jpeg',      disponivel: true,  destaque: false },
+  { id: '29', nome: 'Dichavador Colmeia Grande', categoria: 'Dichavador', descricao: 'Colmeia grande. Corte preciso e durável.',                                             preco: 40.00,  imagem: 'images/produtos/dicha_colme.jpeg',       disponivel: true,  destaque: false },
+  { id: '30', nome: 'Dichavador Colmeia Metal',  categoria: 'Dichavador', descricao: 'Alien Dawg — metal premium colmeia, 4 partes com coador. Edição especial.',            preco: 120.00, imagem: 'images/catalogo2/p27.jpg',              disponivel: true,  destaque: false },
+  { id: '31', nome: 'Case Colmeia',              categoria: 'Dichavador', descricao: 'Case estofado para dichavador colmeia. Proteção e estilo. Esgotado.',                  preco: 30.00,  imagem: 'images/catalogo/case_colmeia.jpg',       disponivel: false, destaque: false },
+  { id: '32', nome: 'Clipper',                   categoria: 'Isqueiro',   descricao: 'Isqueiro Clipper recarregável. Cores sortidas.',                                       preco: 10.00,  imagem: 'images/produtos/clipper.jpeg',           disponivel: true,  destaque: false },
+  { id: '36', nome: 'Bic',                       categoria: 'Isqueiro',   descricao: 'Isqueiro Bic clássico. Cores sortidas.',                                               preco: 10.00,  imagem: 'images/produtos/bic.png',                disponivel: true,  destaque: false },
+  { id: '33', nome: 'Bandeja Sadhu',             categoria: 'Bandeja',    descricao: 'Bandeja Sadhu com arte exclusiva. Perfeita para organizar o ritual.',                  preco: 35.00,  imagem: 'images/catalogo/bandeja_sadhu.jpg',      disponivel: false, destaque: false },
+  { id: '34', nome: 'Pilão Folha Chaveiro',      categoria: 'Acessório',  descricao: 'Mini pilão chaveiro com detalhe de folha. Compacto e estiloso.',                      preco: 16.00,  imagem: 'images/catalogo2/p30.jpg',              disponivel: true,  destaque: false },
+  { id: '35', nome: 'Tubeck',                    categoria: 'Acessório',  descricao: 'Tubeck porta-cigarro. Prático para levar sem amassar.',                               preco: 10.00,  imagem: 'images/catalogo2/p31.jpg',              disponivel: true,  destaque: false },
 ];
 
 const CAT_EMOJI = {
@@ -83,17 +83,14 @@ function updateFooterLinks() {
 async function loadCatalog() {
   const loading = document.getElementById('loadingState');
   const error   = document.getElementById('errorState');
-
   error.classList.add('hidden');
 
-  /* Mostra produtos de exemplo imediatamente — sem travar */
   allProducts = SAMPLE_PRODUCTS;
   loading.classList.add('hidden');
   renderFeatured();
   renderFilters();
   applyFilters();
 
-  /* Tenta atualizar com dados reais do Sheets em segundo plano */
   if (!CONFIG.scriptUrl) return;
   try {
     const liveData = await fetchFromScript();
@@ -107,18 +104,14 @@ async function loadCatalog() {
     console.warn('Catálogo ao vivo indisponível, usando dados locais:', err);
   }
 }
- 
+
 async function fetchFromScript() {
   const controller = new AbortController();
   const timeout    = setTimeout(() => controller.abort(), 15000);
-
   try {
-    const res  = await fetch(`${CONFIG.scriptUrl}?action=catalogo`, {
-      signal: controller.signal,
-    });
+    const res  = await fetch(`${CONFIG.scriptUrl}?action=catalogo`, { signal: controller.signal });
     clearTimeout(timeout);
-    const text = await res.text();
-    const data = JSON.parse(text);
+    const data = JSON.parse(await res.text());
     if (!Array.isArray(data)) throw new Error('Resposta inesperada');
     return data.filter(p => p.nome && p.disponivel);
   } catch (err) {
@@ -126,6 +119,7 @@ async function fetchFromScript() {
     throw err;
   }
 }
+
 function renderFeatured() {
   const grid = document.getElementById('featuredGrid');
   if (!grid) return;
@@ -145,8 +139,7 @@ function renderFilters() {
   categories.forEach(cat => {
     const emoji = CAT_EMOJI[cat] || '•';
     container.insertAdjacentHTML('beforeend',
-      `<button class="filter-chip" data-category="${escHtml(cat)}">${emoji} ${escHtml(cat)}</button>`
-    );
+      `<button class="filter-chip" data-category="${escHtml(cat)}">${emoji} ${escHtml(cat)}</button>`);
   });
   container.querySelectorAll('.filter-chip').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -189,7 +182,10 @@ function productCardHtml(p, showBadge) {
       <h3 class="product-name">${escHtml(p.nome)}</h3>
       ${p.descricao ? `<p class="product-desc">${escHtml(p.descricao)}</p>` : ''}
       <div class="product-footer">
-        <span class="product-price">R$&nbsp;${formatPrice(p.preco)}</span>
+        <div>
+          <span class="product-price">R$&nbsp;${formatPrice(p.preco)}</span>
+          ${p.precoCombo ? `<span class="product-combo-tag">3 por R$&nbsp;${formatPrice(p.precoCombo)}</span>` : ''}
+        </div>
         <button class="btn-add ${inCart ? 'added' : ''}"
                 onclick="addToCart('${escHtml(p.id)}')"
                 aria-label="Adicionar ${escHtml(p.nome)} à sacola">
@@ -210,6 +206,13 @@ function renderProducts(products) {
   }
   empty.classList.add('hidden');
   grid.innerHTML = products.map(p => productCardHtml(p, true)).join('');
+}
+
+function calcItemTotal(item) {
+  if (!item.precoCombo || !item.qtdCombo) return item.preco * item.qty;
+  const combos  = Math.floor(item.qty / item.qtdCombo);
+  const avulsos = item.qty % item.qtdCombo;
+  return combos * item.precoCombo + avulsos * item.preco;
 }
 
 function addToCart(id) {
@@ -243,7 +246,7 @@ function renderCart() {
   const footer  = document.getElementById('cartFooter');
   const totalEl = document.getElementById('cartTotal');
   const totalQty = cart.reduce((s, i) => s + i.qty, 0);
-  const totalVal = cart.reduce((s, i) => s + i.preco * i.qty, 0);
+  const totalVal = cart.reduce((s, i) => s + calcItemTotal(i), 0);
 
   badge.textContent = totalQty;
   badge.classList.toggle('hidden', totalQty === 0);
@@ -262,12 +265,15 @@ function renderCart() {
     const thumb = item.imagem
       ? `<img src="${escHtml(item.imagem)}" alt="${escHtml(item.nome)}" onerror="this.outerHTML='${emoji}'">`
       : emoji;
+    const comboInfo = item.precoCombo && item.qtdCombo && item.qty >= item.qtdCombo
+      ? `<p class="cart-item-combo">🎁 combo de 3 aplicado</p>` : '';
     return `
     <div class="cart-item">
       <div class="cart-item-thumb">${thumb}</div>
       <div class="cart-item-info">
         <p class="cart-item-name">${escHtml(item.nome)}</p>
         <p class="cart-item-unit">R$&nbsp;${formatPrice(item.preco)} cada</p>
+        ${comboInfo}
         <div class="cart-item-controls">
           <button class="qty-btn" onclick="updateQty('${escHtml(item.id)}', -1)">−</button>
           <span class="qty-value">${item.qty}</span>
@@ -275,7 +281,7 @@ function renderCart() {
         </div>
       </div>
       <div class="cart-item-right">
-        <span class="cart-item-subtotal">R$&nbsp;${formatPrice(item.preco * item.qty)}</span>
+        <span class="cart-item-subtotal">R$&nbsp;${formatPrice(calcItemTotal(item))}</span>
         <button class="cart-item-remove" onclick="removeFromCart('${escHtml(item.id)}')">🗑</button>
       </div>
     </div>`;
@@ -304,8 +310,13 @@ function closeCart() {
 
 function checkoutWhatsApp() {
   if (!cart.length) return;
-  const lines = cart.map(i => `▪ ${i.nome} (x${i.qty}) — R$ ${formatPrice(i.preco * i.qty)}`);
-  const total = cart.reduce((s, i) => s + i.preco * i.qty, 0);
+  const lines = cart.map(i => {
+    const sub    = calcItemTotal(i);
+    const combos = i.precoCombo && i.qtdCombo ? Math.floor(i.qty / i.qtdCombo) : 0;
+    const extra  = combos > 0 ? ` (${combos} combo${combos > 1 ? 's' : ''})` : '';
+    return `▪ ${i.nome} (x${i.qty})${extra} — R$ ${formatPrice(sub)}`;
+  });
+  const total = cart.reduce((s, i) => s + calcItemTotal(i), 0);
   const msg = ['🌿 *Olá! Gostaria de fazer um pedido na Brisaria:*', '', ...lines, '',
     `💰 *Total: R$ ${formatPrice(total)}*`, '', 'Pode confirmar disponibilidade e forma de entrega? 😊'].join('\n');
   window.open(`https://wa.me/${CONFIG.whatsappNumber}?text=${encodeURIComponent(msg)}`, '_blank');
@@ -321,7 +332,6 @@ function setupLoyaltyForm() {
     const email    = document.getElementById('loyaltyEmail').value.trim();
     const nasc     = document.getElementById('loyaltyBirth').value;
     const btn      = document.getElementById('loyaltySubmitBtn');
-
     let valid = true;
     [{ el: document.getElementById('loyaltyName'), val: nome },
      { el: document.getElementById('loyaltyPhone'), val: whatsapp }].forEach(({ el, val }) => {
@@ -329,10 +339,8 @@ function setupLoyaltyForm() {
       else el.classList.remove('error');
     });
     if (!valid) return;
-
     btn.textContent = 'Cadastrando...';
     btn.disabled    = true;
-
     try {
       if (CONFIG.scriptUrl) {
         await fetch(CONFIG.scriptUrl, {
@@ -365,13 +373,11 @@ async function consultarPontos() {
   const btn    = document.getElementById('pontosConsultarBtn');
   const result = document.getElementById('pontosResult');
   const wNum   = (input.value || '').replace(/\D/g, '');
-
   if (!wNum || wNum.length < 8) { input.classList.add('error'); return; }
   input.classList.remove('error');
   btn.textContent = 'Consultando...';
   btn.disabled    = true;
   result.classList.add('hidden');
-
   try {
     const res  = await fetch(`${CONFIG.scriptUrl}?action=pontos&w=${wNum}`);
     const data = await res.json();
@@ -385,20 +391,14 @@ async function consultarPontos() {
         : `<p class="resgates-empty">Continue comprando para chegar lá 🌿</p>`;
       result.innerHTML = `
         <p class="pontos-nome">Olá, <strong>${escHtml(data.nome)}</strong>! 🌿</p>
-        <div class="pontos-saldo-box">
-          <span class="pontos-saldo-num">${data.saldo}</span>
-          <span class="pontos-saldo-label">pontos</span>
-        </div>
+        <div class="pontos-saldo-box"><span class="pontos-saldo-num">${data.saldo}</span><span class="pontos-saldo-label">pontos</span></div>
         <p class="pontos-detalhe">Ganhos: ${data.pontos_ganhos} · Resgatados: ${data.pontos_resgatados}</p>
-        ${data.saldo > 0
-          ? `<div class="pontos-resgates"><p class="resgates-title">Disponível para resgatar:</p>${resgatesHtml}</div>`
-          : resgatesHtml}
+        ${data.saldo > 0 ? `<div class="pontos-resgates"><p class="resgates-title">Disponível para resgatar:</p>${resgatesHtml}</div>` : resgatesHtml}
         <p class="pontos-rodape">Para resgatar, fale com a gente no WhatsApp 💬</p>`;
-  }
+    }
   } catch {
     result.innerHTML = `<p class="pontos-erro">⚠️ Erro de conexão. Tente novamente.</p>`;
   }
-
   result.classList.remove('hidden');
   btn.textContent = 'Consultar pontos';
   btn.disabled    = false;
@@ -451,9 +451,9 @@ function renderAccountPanel() {
   loginEl.classList.add('hidden');
   perfilEl.classList.remove('hidden');
   document.getElementById('accountPanelTitle').textContent = 'Olá, ' + clienteLogado.nome.split(' ')[0] + ' 🌿';
-  document.getElementById('perfilNome').textContent    = clienteLogado.nome;
-  document.getElementById('perfilWpp').textContent     = clienteLogado.wpp;
-  document.getElementById('perfilPontos').textContent  = clienteLogado.saldo ?? 0;
+  document.getElementById('perfilNome').textContent   = clienteLogado.nome;
+  document.getElementById('perfilWpp').textContent    = clienteLogado.wpp;
+  document.getElementById('perfilPontos').textContent = clienteLogado.saldo ?? 0;
   renderHistorico(clienteLogado.historico || []);
 }
 
@@ -480,14 +480,11 @@ async function fazerLogin() {
   const erroEl = document.getElementById('loginErro');
   const wNum   = (input.value || '').replace(/\D/g, '');
   erroEl.classList.add('hidden');
-
   if (!wNum || wNum.length < 8) { input.classList.add('error'); return; }
   input.classList.remove('error');
-
   const btn = document.querySelector('#accountLogin .btn');
   btn.textContent = 'Buscando...';
   btn.disabled    = true;
-
   try {
     const res  = await fetch(`${CONFIG.scriptUrl}?action=perfil&w=${wNum}`);
     const data = await res.json();
@@ -505,7 +502,6 @@ async function fazerLogin() {
     erroEl.textContent = 'Erro de conexão. Tente novamente.';
     erroEl.classList.remove('hidden');
   }
-
   btn.textContent = 'Entrar';
   btn.disabled    = false;
 }
