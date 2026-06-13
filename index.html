@@ -23,16 +23,72 @@
         <a href="#catalogo">Catálogo</a>
         <a href="#fidelidade">Clube da Brisa</a>
       </nav>
-      <button class="cart-btn" id="cartBtn" aria-label="Abrir sacola">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
-          <line x1="3" y1="6" x2="21" y2="6"/>
-          <path d="M16 10a4 4 0 01-8 0"/>
-        </svg>
-        <span class="cart-badge hidden" id="cartBadge">0</span>
-      </button>
+      <div class="header-actions">
+        <button class="icon-btn" id="accountBtn" aria-label="Minha conta">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+          <span class="account-dot hidden" id="accountDot"></span>
+        </button>
+        <button class="cart-btn" id="cartBtn" aria-label="Abrir sacola">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M16 10a4 4 0 01-8 0"/>
+          </svg>
+          <span class="cart-badge hidden" id="cartBadge">0</span>
+        </button>
+      </div>
     </div>
   </header>
+
+  <!-- ===== PAINEL MINHA CONTA ===== -->
+  <div class="cart-overlay" id="accountOverlay"></div>
+
+  <aside class="cart-sidebar account-sidebar" id="accountSidebar">
+    <div class="cart-header">
+      <h3 id="accountPanelTitle">Minha conta 🌿</h3>
+      <button class="close-btn" id="closeAccount" aria-label="Fechar conta">✕</button>
+    </div>
+
+    <div id="accountLogin" class="account-login">
+      <p class="account-hint">Entre com seu WhatsApp para ver seus pontos e histórico de compras.</p>
+      <div class="form-group" style="margin-top:1.2rem">
+        <label for="loginWhatsApp">Seu WhatsApp</label>
+        <input type="tel" id="loginWhatsApp" placeholder="(XX) XXXXX-XXXX"
+               onkeydown="if(event.key==='Enter') fazerLogin()">
+      </div>
+      <button class="btn btn-verde btn-full" style="margin-top:.8rem" onclick="fazerLogin()">
+        Entrar
+      </button>
+      <p class="form-disclaimer" style="margin-top:.6rem">
+        Ainda não é membro? <a href="#fidelidade" onclick="closeAccount()">Cadastre-se no Clube da Brisa</a>
+      </p>
+      <div id="loginErro" class="login-erro hidden"></div>
+    </div>
+
+    <div id="accountPerfil" class="account-perfil hidden">
+      <div class="account-card">
+        <div class="account-avatar">🌿</div>
+        <div>
+          <p class="account-nome" id="perfilNome"></p>
+          <p class="account-wpp"  id="perfilWpp"></p>
+        </div>
+      </div>
+      <div class="account-pontos-box">
+        <span class="account-pontos-num" id="perfilPontos">0</span>
+        <span class="account-pontos-label">pontos</span>
+      </div>
+      <div class="account-historico">
+        <h4 class="account-hist-title">Histórico de compras</h4>
+        <div id="perfilHistorico" class="hist-list"></div>
+      </div>
+      <button class="btn btn-outline-dark btn-full" style="margin-top:1.2rem" onclick="fazerLogout()">
+        Sair
+      </button>
+    </div>
+  </aside>
 
   <!-- ===== HERO ===== -->
   <section class="hero">
@@ -57,24 +113,15 @@
       <div class="highlights-grid">
         <div class="highlight-item">
           <span class="highlight-icon">🚚</span>
-          <div>
-            <strong>Entrega rápida</strong>
-            <p>Pedidos via WhatsApp</p>
-          </div>
+          <div><strong>Entrega rápida</strong><p>Pedidos via WhatsApp</p></div>
         </div>
         <div class="highlight-item">
           <span class="highlight-icon">✅</span>
-          <div>
-            <strong>Produtos selecionados</strong>
-            <p>Qualidade garantida</p>
-          </div>
+          <div><strong>Produtos selecionados</strong><p>Qualidade garantida</p></div>
         </div>
         <div class="highlight-item">
           <span class="highlight-icon">🌿</span>
-          <div>
-            <strong>Clube da Brisa</strong>
-            <p>Acumule pontos</p>
-          </div>
+          <div><strong>Clube da Brisa</strong><p>Acumule pontos</p></div>
         </div>
       </div>
     </div>
@@ -94,14 +141,13 @@
     </div>
   </section>
 
-  <!-- ===== CATALOG ===== -->
+  <!-- ===== CATÁLOGO ===== -->
   <section id="catalogo" class="catalog-section">
     <div class="container">
       <div class="section-header">
         <h2 class="section-title">Catálogo</h2>
         <p class="section-sub">Escolha seus produtos e monte sua sacola</p>
       </div>
-
       <div class="catalog-toolbar">
         <div class="search-box">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -113,25 +159,21 @@
           <button class="filter-chip active" data-category="todos">Todos</button>
         </div>
       </div>
-
       <div class="loading-state" id="loadingState">
         <div class="spinner"></div>
         <p>Carregando produtos...</p>
       </div>
-
       <div class="error-state hidden" id="errorState">
         <p>⚠️ Erro ao carregar catálogo. Verifique as configurações.</p>
       </div>
-
       <div class="products-grid" id="productsGrid"></div>
-
       <div class="empty-state hidden" id="emptyState">
         <p>😕 Nenhum produto encontrado para essa busca.</p>
       </div>
     </div>
   </section>
 
-  <!-- ===== CART OVERLAY + SIDEBAR ===== -->
+  <!-- ===== CARRINHO ===== -->
   <div class="cart-overlay" id="cartOverlay"></div>
 
   <aside class="cart-sidebar" id="cartSidebar">
@@ -139,9 +181,7 @@
       <h3>Sua sacola 🛍️</h3>
       <button class="close-btn" id="closeCart" aria-label="Fechar sacola">✕</button>
     </div>
-    <div class="cart-items" id="cartItems">
-      <!-- preenchido por JS -->
-    </div>
+    <div class="cart-items" id="cartItems"></div>
     <div class="cart-footer" id="cartFooter">
       <div class="cart-summary">
         <div class="cart-total-row">
@@ -162,12 +202,10 @@
   <section id="fidelidade" class="loyalty-section">
     <div class="container">
       <div class="loyalty-inner">
-
         <div class="loyalty-info">
           <span class="loyalty-badge">🌿 Clube da Brisa</span>
           <h2 class="section-title">Cada compra<br>vale pontos</h2>
           <p>Acumule pontos a cada compra e troque por produtos. É simples: compra, acumula, resgata.</p>
-
           <div class="loyalty-tables">
             <div class="loyalty-table">
               <h4 class="loyalty-table-title">🌿 Como ganhar pontos</h4>
@@ -195,7 +233,6 @@
 
         <div class="loyalty-form-card">
           <h3>Quero fazer parte</h3>
-
           <form id="loyaltyForm" novalidate>
             <div class="form-group">
               <label for="loyaltyName">Nome completo</label>
@@ -218,18 +255,13 @@
             </button>
             <p class="form-disclaimer">Seus dados são usados apenas para o Clube da Brisa.</p>
           </form>
-
           <div class="form-success hidden" id="loyaltySuccess">
             <div class="success-icon">🎉</div>
             <h4>Bem-vindo ao Clube da Brisa!</h4>
             <p>Seu cadastro foi realizado. Na próxima compra já começa a acumular pontos!</p>
           </div>
-
-          <!-- Consulta de pontos (aparece quando pontosApiUrl está configurado) -->
           <div id="pontosConsultaSection" class="pontos-consulta-section">
-            <div class="pontos-divider">
-              <span>Já é membro?</span>
-            </div>
+            <div class="pontos-divider"><span>Já é membro?</span></div>
             <h4 class="pontos-consulta-title">Consulte seus pontos</h4>
             <div class="form-group">
               <label for="pontosWhatsApp">Seu WhatsApp</label>
@@ -243,7 +275,6 @@
             <div id="pontosResult" class="pontos-result hidden"></div>
           </div>
         </div>
-
       </div>
     </div>
   </section>
@@ -270,9 +301,7 @@
     </div>
   </footer>
 
-  <!-- Toast notification -->
   <div class="toast" id="toast"></div>
-
   <script src="app.js"></script>
 </body>
 </html>
