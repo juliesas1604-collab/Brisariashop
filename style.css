@@ -1504,5 +1504,100 @@ a { color: inherit; }
   font-weight: 600;
   color: var(--verde-med);
   margin-top: 2px;
+   /* ── MODAL DE PRODUTO ─────────────────────────────────────── */
+.product-modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.55);
+  z-index: 600;
+  backdrop-filter: blur(2px);
+  transition: opacity .25s;
+}
+.product-modal-overlay.hidden { display: none; }
+
+.product-modal {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: var(--branco);
+  border-radius: 20px 20px 0 0;
+  z-index: 601;
+  max-height: 92vh;
+  overflow-y: auto;
+  transition: transform .3s cubic-bezier(.32,1,.4,1);
+  transform: translateY(0);
+}
+.product-modal.hidden { display: none; }
+
+.product-modal-close {
+  position: absolute; top: 14px; right: 16px;
+  background: rgba(0,0,0,.08); border: none;
+  width: 32px; height: 32px; border-radius: 50%;
+  font-size: 16px; cursor: pointer; z-index: 2;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--texto);
+}
+
+.product-modal-carousel {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: var(--bege);
+  border-radius: 20px 20px 0 0;
+}
+.carousel-track {
+  display: flex;
+  height: 100%;
+  transition: transform .35s cubic-bezier(.4,0,.2,1);
+}
+.carousel-track img {
+  min-width: 100%; height: 100%;
+  object-fit: cover; flex-shrink: 0;
+}
+.carousel-btn {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  background: rgba(255,255,255,.85); border: none;
+  width: 36px; height: 36px; border-radius: 50%;
+  font-size: 22px; cursor: pointer; z-index: 2;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,.15);
+  line-height: 1;
+}
+.carousel-prev { left: 10px; }
+.carousel-next { right: 10px; }
+.carousel-btn:disabled { opacity: .3; cursor: default; }
+.carousel-dots {
+  position: absolute; bottom: 10px; left: 50%;
+  transform: translateX(-50%);
+  display: flex; gap: 6px;
+}
+.carousel-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: rgba(255,255,255,.5); border: none; padding: 0; cursor: pointer;
+  transition: background .2s;
+}
+.carousel-dot.active { background: #fff; }
+
+.product-modal-info {
+  padding: 20px 20px 32px;
+}
+.product-modal-cat {
+  font-size: 12px; font-weight: 600; letter-spacing: .08em;
+  color: var(--verde-med); text-transform: uppercase; margin-bottom: 4px;
+}
+.product-modal-name {
+  font-size: 20px; font-weight: 700; margin-bottom: 8px; color: var(--texto);
+}
+.product-modal-desc {
+  font-size: 14px; color: var(--texto-3); line-height: 1.6; margin-bottom: 16px;
+}
+.product-modal-footer {
+  display: flex; align-items: center; justify-content: space-between;
+}
+.product-modal-price {
+  font-size: 22px; font-weight: 800; color: var(--verde);
+}
+.product-modal-footer .btn-add {
+  width: 48px; height: 48px; font-size: 22px;
+}
   letter-spacing: 0.1px;
 }
