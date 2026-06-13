@@ -25,7 +25,7 @@
       </nav>
       <div class="header-actions">
         <button class="icon-btn" id="accountBtn" aria-label="Minha conta">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
             <circle cx="12" cy="7" r="4"/>
           </svg>
@@ -53,8 +53,12 @@
     </div>
 
     <div id="accountLogin" class="account-login">
-      <p class="account-hint">Entre com seu WhatsApp para ver seus pontos e histórico de compras.</p>
-      <div class="form-group" style="margin-top:1.2rem">
+      <div class="account-login-hero">
+        <span class="hero-emoji">🌿</span>
+        <h4>Clube da Brisa</h4>
+        <p>Entre para ver seus pontos e histórico de compras.</p>
+      </div>
+      <div class="form-group">
         <label for="loginWhatsApp">Seu WhatsApp</label>
         <input type="tel" id="loginWhatsApp" placeholder="(XX) XXXXX-XXXX"
                onkeydown="if(event.key==='Enter') fazerLogin()">
@@ -164,7 +168,7 @@
         <p>Carregando produtos...</p>
       </div>
       <div class="error-state hidden" id="errorState">
-        <p>⚠️ Erro ao carregar catálogo. Verifique as configurações.</p>
+        <p>⚠️ Erro ao carregar catálogo.</p>
       </div>
       <div class="products-grid" id="productsGrid"></div>
       <div class="empty-state hidden" id="emptyState">
