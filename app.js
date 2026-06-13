@@ -70,7 +70,7 @@ const SAMPLE_PRODUCTS = [
   // ── ACESSÓRIO ──
   { id: '34', nome: 'Pilão Folha Chaveiro',      categoria: 'Acessório',  descricao: 'Mini pilão chaveiro com detalhe de folha. Compacto e estiloso.',                      preco: 16.00,  imagem: 'images/catalogo2/p30.jpg',            disponivel: true,  destaque: false },
   { id: '35', nome: 'Tubeck',                    categoria: 'Acessório',  descricao: 'Tubeck porta-cigarro. Prático para levar sem amassar.',                               preco: 10.00,  imagem: 'images/catalogo2/p31.jpg',            disponivel: true,  destaque: false },
-  { id: '38', nome: 'Porta Bic Brisaria',        categoria: 'Acessório',  descricao: 'Capa para isqueiro Bic com logo Brisaria. Produzida em impressão 3D. Verde menta com logo verde.',  preco: 15.00,  imagem: 'images/produtos/porta_bic_1.jpg',  imagens: ['images/produtos/porta_bic_1.jpg','images/produtos/porta_bic_2.jpg','images/produtos/porta_bic_3.jpg'],  disponivel: true,  destaque: true  },
+  { id: '38', nome: 'Porta Bic Brisaria',        categoria: 'Acessório',  descricao: 'Capa para isqueiro Bic com logo Brisaria. Produzida em impressão 3D. Verde menta com logo verde.',  preco: 15.00,  imagem: 'images/produtos/porta_bic_1.jpeg',  imagens: ['images/produtos/porta_bic_1.jpeg','images/produtos/porta_bic_2.jpeg','images/produtos/porta_bic_3.jpeg'],  disponivel: true,  destaque: true  },
 ];
 
 /* ─────────────────────────────────────────────
