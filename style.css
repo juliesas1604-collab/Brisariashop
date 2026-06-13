@@ -1504,5 +1504,18 @@ a { color: inherit; }
   font-weight: 600;
   color: var(--verde-med);
   margin-top: 2px;
+
+   @media (min-width: 700px) {
+  .product-modal {
+    max-width: 460px;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    border-radius: 20px;
+    bottom: auto;
+    top: 50%;
+    margin-top: -230px;
+  }
+}
   letter-spacing: 0.1px;
 }
