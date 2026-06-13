@@ -1,597 +1,799 @@
-/**
- * ============================================================
- * BRISARIA — Apps Script Web App
- * ============================================================
- *
- * COMO CONFIGURAR (faça UMA VEZ):
- *
- * 1. Abra o Google Sheets da Brisaria
- * 2. Extensões → Apps Script → cole este arquivo inteiro
- * 3. Salve (Ctrl+S)
- * 4. No menu de funções, selecione "setup" e clique ▶ Executar
- *    → Isso cria as abas necessárias na planilha
- * 5. Selecione "popularProdutos" e clique ▶ Executar
- *    → Isso preenche a aba PRODUTOS com o catálogo completo
- * 6. Publicar como Web App:
- *    Implantar → Nova implantação → Tipo: Web App
- *    Executar como: Eu (sua conta Google)
- *    Quem tem acesso: Qualquer pessoa
- *    → Copie a URL gerada (formato: https://script.google.com/macros/s/.../exec)
- * 7. Cole essa URL em:
- *    - APP/app.js  → CONFIG.scriptUrl
- *    - SITE/app.js → CONFIG.scriptUrl
- *
- * ============================================================
- */
+/* ================================================
+   BRISARIA — app.js
+   ================================================ */
 
+/* ─────────────────────────────────────────────
+   CONFIGURAÇÕES — edite aqui antes de publicar
+   ───────────────────────────────────────────── */
+const CONFIG = {
 
-// ── NOMES DAS ABAS ───────────────────────────────────────────
-var ABA_PRODUTOS = 'PRODUTOS';
-var ABA_VENDAS   = 'Vendas';
-var ABA_COMPRAS  = 'Compras';
-var ABA_SAIDAS   = 'Saidas';
-var ABA_CLUBE    = 'Clube';
+  /* Número WhatsApp (código do país + DDD + número, sem + ou espaços) */
+  whatsappNumber: '5511930637619',
 
+  /* URL do Apps Script Web App (mesmo URL para catálogo + pontos do Clube).
+     Depois de publicar como Web App, cole a URL aqui.
+     Formato: https://script.google.com/macros/s/SEU_ID/exec
+     Enquanto não configurar, o site usa os dados de exemplo abaixo. */
+  scriptUrl: 'https://script.google.com/macros/s/AKfycbzhzXhDHNeHeY1tYTelrLF59ADNy_9BZd7GrQv8vtnMO7X5sCn74yzaAAxVziNqnR0/exec',
+};
 
-// ============================================================
-// SETUP — executa uma vez para criar as abas
-// ============================================================
-function setup() {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
+/* ─────────────────────────────────────────────
+   DADOS DE EXEMPLO (usados quando useSampleData = true)
+   ───────────────────────────────────────────── */
+const SAMPLE_PRODUCTS = [
+  // ── KIT ──
+  { id: '1',  nome: 'Kitzinho',                  categoria: 'Kit',        descricao: 'Mini kit Brisaria para experimentar. 2 sedinhas Bem Bolado + piteira Sadhu large.',    preco: 12.00,  imagem: 'images/catalogo/kit_kitzinho.jpg',   disponivel: true,  destaque: false },
+  { id: '2',  nome: 'Kit Tabas',                 categoria: 'Kit',        descricao: '1 tabaco + 1 filtro Aleda + 2 sedinhas Sadhu. Tudo que você precisa.',                  preco: 30.00,  imagem: 'images/produtos/kit_tabas.jpeg',       disponivel: true,  destaque: true  },
+  { id: '3',  nome: 'Kit Completo',              categoria: 'Kit',        descricao: '1 tabaco + 2 sedinhas Bem Bolado + 1 filtro Aleda + 1 piteira Sadhu + 3 sedinhas.',    preco: 45.00,  imagem: 'images/produtos/kit_completo.png',   disponivel: true,  destaque: false },
+  { id: '37', nome: 'Kit Premium',               categoria: 'Kit',        descricao: 'Kit premium Brisaria. Perfeito para presentear.',                                       preco: 45.00,  imagem: 'images/produtos/kit_tabas_premium.jpeg', disponivel: true,  destaque: false },
+  { id: '4',  nome: 'Kit Tabas 2.0',             categoria: 'Kit',        descricao: '2 tabacos + 2 filtros Aleda + 6 sedinhas Guru Spirit Slim ou Large.',                  preco: 60.00,  imagem: 'images/catalogo2/p12.jpg',            disponivel: true,  destaque: false },
+  { id: '5',  nome: 'Kit Tabas 4.0',             categoria: 'Kit',        descricao: '4 tabacos + 4 filtros Aleda + 12 sedinhas Guru Spirit. O kit definitivo.',             preco: 110.00, imagem: 'images/catalogo2/p13.jpg',            disponivel: true,  destaque: true  },
+  // ── TABACO ──
+  { id: '6',  nome: 'Hi Tabaco 25g',             categoria: 'Tabaco',     descricao: 'Blend especial com aroma diferenciado e fumaça suave. 25g.',                           preco: 28.00,  imagem: 'images/catalogo/tabacos.jpg',         disponivel: false, destaque: false },
+  { id: '7',  nome: 'Tabaco Amsterdam 25g',      categoria: 'Tabaco',     descricao: 'Blend suave e aromático, ideal para quem curte um cigarro levinho. 25g.',              preco: 18.00,  imagem: 'images/catalogo2/p07.jpg',            disponivel: true,  destaque: true  },
+  { id: '8',  nome: 'Tabaco Acrema 20g',         categoria: 'Tabaco',     descricao: 'Tabaco nacional com sabor único e encorpado. 20g.',                                    preco: 18.00,  imagem: 'images/catalogo/tabacos.jpg',         disponivel: false, destaque: false },
+  // ── SEDA ──
+  { id: '9',  nome: 'Seda King Size',            categoria: 'Seda',       descricao: 'King size brown, papel fino e queima uniforme.',                                       preco: 4.00,  precoCombo: 10.00, qtdCombo: 3, imagem: 'images/produtos/seda_king.jpeg',       disponivel: true,  destaque: false },
+  { id: '10', nome: 'Seda Bem Bolado',           categoria: 'Seda',       descricao: 'Brown slim ultrafina da Bem Bolado. Top de linha.',                                    preco: 5.00,  precoCombo: 12.00, qtdCombo: 3, imagem: 'images/catalogo2/p02.jpg',            disponivel: true,  destaque: true  },
+  { id: '11', nome: 'Seda Smoking',              categoria: 'Seda',       descricao: 'King size brown Smoking, ícone das sedas artesanais.',                                 preco: 6.00,  precoCombo: 15.00, qtdCombo: 3, imagem: 'images/produtos/seda_smoking.jpeg',    disponivel: true,  destaque: false },
+  { id: '12', nome: 'Seda Sadhu Ultra Longa',    categoria: 'Seda',       descricao: 'Ultra longa Sadhu, queima lenta e saborosa.',                                          preco: 5.00,  precoCombo: 12.00, qtdCombo: 3, imagem: 'images/catalogo2/p14.jpg',            disponivel: true,  destaque: false },
+  { id: '13', nome: 'Sedinha Sadhu',             categoria: 'Seda',       descricao: 'Sedinha Sadhu slim ultrafina. Fácil de rolar.',                                        preco: 4.00,  precoCombo: 10.00, qtdCombo: 3, imagem: 'images/catalogo2/p15.jpg',            disponivel: true,  destaque: false },
+  // ── FILTRO ──
+  { id: '14', nome: 'Filtro Aleda Extra Longo',  categoria: 'Filtro',     descricao: 'Filtro extra longo Aleda Slim 22mm. 150 unidades. Filtração superior.',                preco: 8.00,   imagem: 'images/catalogo2/p04.jpg',            disponivel: true,  destaque: false },
+  // ── PITEIRA ──
+  { id: '15', nome: 'Piteira Tonabê Mega Longa', categoria: 'Piteira',    descricao: 'Artesanal de madeira Tonabê mega longa. Filtra e esfria com elegância.',               preco: 7.00,   imagem: 'images/produtos/a_piteira.jpeg',       disponivel: true,  destaque: true  },
+  { id: '16', nome: 'Piteira Tonabê Longa',      categoria: 'Piteira',    descricao: 'Madeira Tonabê versão longa. Artesanal e resistente.',                                 preco: 6.00,   imagem: 'images/produtos/a_piteira_1.jpeg',     disponivel: true,  destaque: false },
+  { id: '17', nome: 'Piteira Sadhu Large',       categoria: 'Piteira',    descricao: 'Bambu natural Sadhu large, 35 tips. Leve, resistente e sustentável.',                  preco: 5.00,   imagem: 'images/produtos/piteira_tonabe.jpeg',  disponivel: true,  destaque: false },
+  { id: '18', nome: 'Piteira de Vidro',          categoria: 'Piteira',    descricao: 'Vidro transparente, fácil de limpar e muito estilosa.',                                preco: 8.00,   imagem: 'images/catalogo/acessorios.jpg',      disponivel: true,  destaque: false },
+  // ── CUIA ──
+  { id: '19', nome: 'Cuia Colorida',             categoria: 'Cuia',       descricao: 'Cuia colorida Tonabê. Cores variadas — consulte disponibilidade.',                     preco: 16.00,  imagem: 'images/catalogo2/p22.jpg',            disponivel: true,  destaque: false },
+  { id: '20', nome: 'Cuia Spa Abduzido',         categoria: 'Cuia',       descricao: 'Cuia spa da Abduzido. Design exclusivo em cores vibrantes.',                           preco: 20.00,  imagem: 'images/produtos/cuia_spa_abduzido.jpeg', disponivel: true,  destaque: true  },
+  // ── TESOURA ──
+  { id: '21', nome: 'Tesoura Passarinho',        categoria: 'Tesoura',    descricao: 'Tesoura passarinho. Rosa/dourado ou furta-cor. Corte preciso.',                        preco: 16.00,  imagem: 'images/catalogo2/p17.jpg',            disponivel: true,  destaque: false },
+  { id: '22', nome: 'Tesoura Dobrável Tonabê',   categoria: 'Tesoura',    descricao: 'Tesoura dobrável Tonabê. Cores variadas. Prática e compacta.',                         preco: 16.00,  imagem: 'images/catalogo2/p18.jpg',            disponivel: true,  destaque: false },
+  // ── SLICK ──
+  { id: '23', nome: 'Slick Tonabê 5ml',          categoria: 'Slick',      descricao: 'Slick de silicone Tonabê, 5ml. Ideal para guardar sua brisa.',                        preco: 16.00,  imagem: 'images/catalogo2/p20.jpg',            disponivel: true,  destaque: false },
+  { id: '24', nome: 'Slick Lego 26ml',           categoria: 'Slick',      descricao: 'Slick com tampa no estilo Lego, 26ml. Divertido e funcional.',                         preco: 25.00,  imagem: 'images/catalogo2/p21.jpg',            disponivel: true,  destaque: false },
+  // ── DICHAVADOR ──
+  { id: '25', nome: 'Dichavador Sadhu Peq.',     categoria: 'Dichavador', descricao: 'Sadhu plástico pequeno flor. Leve e prático para o dia a dia.',                       preco: 20.00,  imagem: 'images/produtos/dichavas_colmeia.jpeg', disponivel: true,  destaque: false },
+  { id: '26', nome: 'Dichavador Lion Rolling',   categoria: 'Dichavador', descricao: 'Lion Rolling Circus. Design exclusivo, resistente e compacto.',                        preco: 40.00,  imagem: 'images/catalogo2/p25.jpg',            disponivel: true,  destaque: false },
+  { id: '27', nome: 'Dichavador Metal 4 Partes', categoria: 'Dichavador', descricao: 'Metal compacto, 4 partes. Estampas variadas. Ótimo para levar na bolsa.',              preco: 30.00,  imagem: 'images/catalogo2/p26.jpg',            disponivel: true,  destaque: false },
+  { id: '28', nome: 'Dichavador Colmeia Peq.',   categoria: 'Dichavador', descricao: 'Colmeia plástico pequeno. Custo-benefício imbatível.',                                 preco: 30.00,  imagem: 'images/produtos/dich_colmeia.jpeg',    disponivel: true,  destaque: false },
+  { id: '29', nome: 'Dichavador Colmeia Grande', categoria: 'Dichavador', descricao: 'Colmeia grande. Corte preciso e durável.',                                             preco: 40.00,  imagem: 'images/produtos/dicha_colme.jpeg',    disponivel: true,  destaque: false },
+  { id: '30', nome: 'Dichavador Colmeia Metal',  categoria: 'Dichavador', descricao: 'Alien Dawg — metal premium colmeia, 4 partes com coador. Edição especial.',            preco: 120.00, imagem: 'images/catalogo2/p27.jpg',            disponivel: true,  destaque: false },
+  { id: '31', nome: 'Case Colmeia',              categoria: 'Dichavador', descricao: 'Case estofado para dichavador colmeia. Proteção e estilo. Esgotado.',                  preco: 30.00,  imagem: 'images/catalogo/case_colmeia.jpg',    disponivel: false, destaque: false },
+  // ── ISQUEIRO ──
+  { id: '32', nome: 'Clipper',                   categoria: 'Isqueiro',   descricao: 'Isqueiro Clipper recarregável. Cores sortidas.',                                       preco: 10.00,  imagem: 'images/produtos/clipper.jpeg',         disponivel: true,  destaque: false },
+  { id: '36', nome: 'Bic',                       categoria: 'Isqueiro',   descricao: 'Isqueiro Bic clássico. Cores sortidas.',                                               preco: 10.00,  imagem: 'images/produtos/bic.png',             disponivel: true,  destaque: false },
+  // ── BANDEJA ──
+  { id: '33', nome: 'Bandeja Sadhu',             categoria: 'Bandeja',    descricao: 'Bandeja Sadhu com arte exclusiva. Perfeita para organizar o ritual.',                  preco: 35.00,  imagem: 'images/catalogo/bandeja_sadhu.jpg',   disponivel: false, destaque: false },
+  // ── ACESSÓRIO ──
+  { id: '34', nome: 'Pilão Folha Chaveiro',      categoria: 'Acessório',  descricao: 'Mini pilão chaveiro com detalhe de folha. Compacto e estiloso.',                      preco: 16.00,  imagem: 'images/catalogo2/p30.jpg',            disponivel: true,  destaque: false },
+  { id: '35', nome: 'Tubeck',                    categoria: 'Acessório',  descricao: 'Tubeck porta-cigarro. Prático para levar sem amassar.',                               preco: 10.00,  imagem: 'images/catalogo2/p31.jpg',            disponivel: true,  destaque: false },
+];
 
-  _criarAbaSeNaoExistir(ss, ABA_PRODUTOS, [
-    'id','nome','categoria','preco_venda','preco_custo','estoque_minimo',
-    'estoque_inicial','imagem','disponivel','destaque','descricao'
-  ]);
-  _criarAbaSeNaoExistir(ss, ABA_VENDAS, [
-    'id','data','produto','quantidade','valor','pagamento','cliente','clienteWpp','timestamp'
-  ]);
-  _criarAbaSeNaoExistir(ss, ABA_COMPRAS, [
-    'id','data','fornecedor','produto','quantidade','custo_unit','custo_total','obs','timestamp'
-  ]);
-  _criarAbaSeNaoExistir(ss, ABA_SAIDAS, [
-    'id','data','descricao','valor','timestamp'
-  ]);
-  _criarAbaSeNaoExistir(ss, ABA_CLUBE, [
-    'id','nome','whatsapp','email','nascimento','pontos_ganhos','pontos_resgatados','data_cadastro'
-  ]);
+/* ─────────────────────────────────────────────
+   EMOJIS POR CATEGORIA
+   ───────────────────────────────────────────── */
+const CAT_EMOJI = {
+  Tabaco:     '🌿',
+  Seda:       '📄',
+  Piteira:    '🎋',
+  Cuia:       '🥃',
+  Kit:        '🎁',
+  Filtro:     '🚬',
+  Slick:      '🧴',
+  Dichavador: '⚙️',
+  Isqueiro:   '🔥',
+  Bandeja:    '🎨',
+  Tesoura:    '✂️',
+  Acessório:  '🛠️',
+};
 
-  SpreadsheetApp.getUi().alert(
-    'Setup concluído!\n\nAgora execute a função "popularProdutos" e depois publique como Web App.'
-  );
+/* ─────────────────────────────────────────────
+   ESTADO
+   ───────────────────────────────────────────── */
+let allProducts    = [];
+let activeCategory = 'todos';
+let searchQuery    = '';
+let cart           = JSON.parse(localStorage.getItem('brisaria_cart') || '[]');
+let clienteLogado  = JSON.parse(localStorage.getItem('brisaria_cliente') || 'null');
+
+/* ─────────────────────────────────────────────
+   INICIALIZAÇÃO
+   ───────────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded', () => {
+  setupHeader();
+  setupEventListeners();
+  setupLoyaltyForm();
+  setupPontosConsulta();
+  updateFooterLinks();
+  loadCatalog();
+  renderCart();
+  renderAccountBtn();
+});
+
+/* ─────────────────────────────────────────────
+   HEADER — efeito de scroll
+   ───────────────────────────────────────────── */
+function setupHeader() {
+  const header = document.getElementById('header');
+  const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 10);
+  window.addEventListener('scroll', onScroll, { passive: true });
 }
 
+/* ─────────────────────────────────────────────
+   FOOTER LINKS
+   ───────────────────────────────────────────── */
+function updateFooterLinks() {
+  const el = document.getElementById('footerWhatsapp');
+  if (el) el.href = `https://wa.me/${CONFIG.whatsappNumber}`;
+}
 
-// ============================================================
-// POPULAR PRODUTOS — executa uma vez para preencher o catálogo
-// ============================================================
-function popularProdutos() {
-  var ss  = SpreadsheetApp.getActiveSpreadsheet();
-  var aba = ss.getSheetByName(ABA_PRODUTOS);
+/* ─────────────────────────────────────────────
+   CATÁLOGO — carregamento
+   ───────────────────────────────────────────── */
+async function loadCatalog() {
+  const loading = document.getElementById('loadingState');
+  const error   = document.getElementById('errorState');
 
-  if (!aba) {
-    SpreadsheetApp.getUi().alert('Execute "setup" primeiro!');
+  // Mostra os dados de exemplo imediatamente — site nunca fica travado
+  allProducts = SAMPLE_PRODUCTS;
+  loading.classList.add('hidden');
+  error.classList.add('hidden');
+  renderFeatured();
+  renderFilters();
+  applyFilters();
+
+  // Tenta buscar dados ao vivo em segundo plano
+  if (!CONFIG.scriptUrl) return;
+  try {
+    const live = await fetchFromScript();
+    if (live && live.length) {
+      allProducts = live;
+      renderFeatured();
+      renderFilters();
+      applyFilters();
+    }
+  } catch (err) {
+    console.warn('Catálogo ao vivo indisponível, usando dados de exemplo:', err);
+  }
+}
+
+async function fetchFromScript() {
+  const controller = new AbortController();
+  const timeout    = setTimeout(() => controller.abort(), 15000);
+
+  try {
+    const res  = await fetch(`${CONFIG.scriptUrl}?action=catalogo`, {
+      signal: controller.signal,
+    });
+    clearTimeout(timeout);
+    const text = await res.text();
+    const data = JSON.parse(text);
+    if (!Array.isArray(data)) throw new Error('Resposta inesperada');
+    return data.filter(p => p.nome && p.disponivel);
+  } catch (err) {
+    clearTimeout(timeout);
+    throw err;
+  }
+}
+
+/* ─────────────────────────────────────────────
+   VITRINE — Mais pedidos
+   ───────────────────────────────────────────── */
+function renderFeatured() {
+  const grid = document.getElementById('featuredGrid');
+  if (!grid) return;
+
+  const destaques = allProducts.filter(p => p.disponivel && p.destaque);
+  if (!destaques.length) {
+    const section = grid.closest('.featured-section');
+    if (section) section.style.display = 'none';
     return;
   }
 
-  if (aba.getLastRow() > 1) {
-    aba.deleteRows(2, aba.getLastRow() - 1);
-  }
+  grid.innerHTML = destaques.map(p => {
+    const inCart = cart.some(i => i.id === p.id);
+    const emoji  = CAT_EMOJI[p.categoria] || '📦';
+    const imgTag = p.imagem
+      ? `<img src="${escHtml(p.imagem)}" alt="${escHtml(p.nome)}" loading="lazy"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+      : '';
+    const placeholder = `<div class="product-img-placeholder" style="display:${p.imagem ? 'none' : 'flex'}">${emoji}</div>`;
 
-  var produtos = [
-    ['P001','Tabaco Amsterdam 25g',     'Tabaco',    18, 0, 5, 0, 'images/catalogo2/p07.jpg',    'TRUE',  'TRUE',  'Blend suave e aromático, ideal para quem curte um cigarro levinho. 25g.'],
-    ['P002','Tabaco Acrema 20g',        'Tabaco',    18, 0, 5, 0, 'images/catalogo/tabacos.jpg', 'FALSE', 'FALSE', 'Tabaco nacional com sabor único e encorpado. 20g.'],
-    ['P003','Hi Tabaco 25g',            'Tabaco',    28, 0, 3, 0, 'images/catalogo/tabacos.jpg', 'FALSE', 'FALSE', 'Blend especial com aroma diferenciado e fumaça suave. 25g.'],
-    ['P004','Tabaco Solto (dose)',       'Tabaco',     5, 0, 0, 0, '',                            'TRUE',  'FALSE', 'Dose avulsa de tabaco.'],
-    ['P005','Seda Bem Bolado Brown Slim','Seda',       5, 0,10, 0, 'images/catalogo2/p02.jpg',    'TRUE',  'TRUE',  'Brown slim ultrafina da Bem Bolado. Top de linha. 3 por R$12.'],
-    ['P006','Seda Bem Bolado Brown Large','Seda',      5, 0,10, 0, 'images/catalogo2/p02.jpg',    'TRUE',  'FALSE', 'Brown large da Bem Bolado. 3 por R$12.'],
-    ['P007','Seda Guru Spirit Slim',    'Seda',        4, 0,10, 0, '',                            'TRUE',  'FALSE', 'Sedinha Guru Spirit slim. Fácil de rolar. 3 por R$10.'],
-    ['P008','Seda Guru Spirit Brown Longa','Seda',     5, 0,10, 0, '',                            'TRUE',  'FALSE', 'Guru Spirit Brown Longa. 3 por R$12.'],
-    ['P009','Seda Papelito Brown Slim', 'Seda',        5, 0,10, 0, '',                            'TRUE',  'FALSE', 'Papelito Brown Slim. 3 por R$12.'],
-    ['P010','Seda Smoking KS Brown',    'Seda',        5, 0,10, 0, 'images/produtos/seda_smoking.jpeg', 'TRUE','FALSE','King size brown Smoking, ícone das sedas artesanais. 3 por R$15.'],
-    ['P011','Piteira Tonabê Large',     'Piteira',     7, 0, 5, 0, 'images/produtos/a_piteira_1.jpeg',  'TRUE','FALSE','Madeira Tonabê versão longa. Artesanal e resistente.'],
-    ['P012','Piteira Mega Large Tonabê','Piteira',     7, 0, 5, 0, 'images/produtos/a_piteira.jpeg',    'TRUE','TRUE', 'Artesanal de madeira Tonabê mega longa. Filtra e esfria com elegância.'],
-    ['P013','Piteira Sadhu Large',      'Piteira',     5, 0, 5, 0, 'images/produtos/piteira_tonabe.jpeg','TRUE','FALSE','Bambu natural Sadhu large, 35 tips. Leve, resistente e sustentável.'],
-    ['P014','Piteira de Vidro',         'Piteira',     8, 0, 3, 0, 'images/catalogo/acessorios.jpg',    'TRUE','FALSE','Vidro transparente, fácil de limpar e muito estilosa.'],
-    ['P015','Cuia Tonabê Colorida',     'Cuia',       16, 0, 3, 0, 'images/catalogo2/p22.jpg',    'TRUE',  'FALSE', 'Cuia colorida Tonabê. Cores variadas — consulte disponibilidade.'],
-    ['P016','Cuia Spa Abduzido',        'Cuia',       20, 0, 3, 0, 'images/produtos/cuia_spa_abduzido.jpeg','TRUE','TRUE','Cuia spa da Abduzido. Design exclusivo em cores vibrantes.'],
-    ['P017','Kit Tabas',               'Kit',         30, 0, 3, 0, 'images/produtos/kit_tabas.jpeg','TRUE', 'TRUE',  '1 tabaco + 1 filtro Aleda + 2 sedinhas Sadhu. Tudo que você precisa.'],
-    ['P018','Kit Tabas Premium',       'Kit',         45, 0, 3, 0, 'images/produtos/kit_tabas_premium.jpeg','TRUE','FALSE','Kit premium Brisaria. Perfeito para presentear.'],
-    ['P019','Kit Completo',            'Kit',         45, 0, 2, 0, 'images/produtos/kit_completo.png','TRUE','FALSE','1 tabaco + 2 sedinhas + 1 filtro Aleda + 1 piteira Sadhu + 3 sedinhas.'],
-    ['P020','Kit Tabas 2.0',           'Kit',         60, 0, 2, 0, 'images/catalogo2/p12.jpg',    'TRUE',  'FALSE', '2 tabacos + 2 filtros Aleda + 6 sedinhas Guru Spirit Slim ou Large.'],
-    ['P021','Kit Tabas 4.0',           'Kit',        110, 0, 1, 0, 'images/catalogo2/p13.jpg',    'TRUE',  'TRUE',  '4 tabacos + 4 filtros Aleda + 12 sedinhas Guru Spirit. O kit definitivo.'],
-    ['P022','Kitzinho',                'Kit',         12, 0, 3, 0, 'images/catalogo/kit_kitzinho.jpg','TRUE','FALSE','Mini kit Brisaria para experimentar. 2 sedinhas Bem Bolado + piteira Sadhu large.'],
-    ['P023','Filtro Aleda Extra Longo','Filtro',       8, 0, 5, 0, 'images/catalogo2/p04.jpg',    'TRUE',  'FALSE', 'Filtro extra longo Aleda Slim 22mm. 150 unidades. Filtração superior.'],
-    ['P024','Clipper',                 'Isqueiro',    10, 0, 5, 0, 'images/produtos/clipper.jpeg', 'TRUE',  'FALSE', 'Isqueiro Clipper recarregável. Cores sortidas.'],
-    ['P025','Bic',                     'Isqueiro',    10, 0, 5, 0, 'images/produtos/bic.png',      'TRUE',  'FALSE', 'Isqueiro Bic clássico. Cores sortidas.'],
-    ['P026','Tesoura Passarinho',      'Tesoura',     16, 0, 3, 0, 'images/catalogo2/p17.jpg',    'TRUE',  'FALSE', 'Tesoura passarinho. Rosa/dourado ou furta-cor. Corte preciso.'],
-    ['P027','Tesoura Dobrável Tonabê', 'Tesoura',     16, 0, 3, 0, 'images/catalogo2/p18.jpg',    'TRUE',  'FALSE', 'Tesoura dobrável Tonabê. Cores variadas. Prática e compacta.'],
-    ['P028','Slick Tonabê 5ml',        'Slick',       16, 0, 3, 0, 'images/catalogo2/p20.jpg',    'TRUE',  'FALSE', 'Slick de silicone Tonabê, 5ml. Ideal para guardar sua brisa.'],
-    ['P029','Slick Lego 26ml',         'Slick',       25, 0, 2, 0, 'images/catalogo2/p21.jpg',    'TRUE',  'FALSE', 'Slick com tampa no estilo Lego, 26ml. Divertido e funcional.'],
-    ['P030','Dichavador Sadhu Peq.',   'Dichavador',  20, 0, 3, 0, 'images/produtos/dichavas_colmeia.jpeg','TRUE','FALSE','Sadhu plástico pequeno flor. Leve e prático para o dia a dia.'],
-    ['P031','Dichavador Lion Rolling', 'Dichavador',  40, 0, 2, 0, 'images/catalogo2/p25.jpg',    'TRUE',  'FALSE', 'Lion Rolling Circus. Design exclusivo, resistente e compacto.'],
-    ['P032','Dichavador Metal 4 Partes','Dichavador', 30, 0, 2, 0, 'images/catalogo2/p26.jpg',    'TRUE',  'FALSE', 'Metal compacto, 4 partes. Estampas variadas. Ótimo para levar na bolsa.'],
-    ['P033','Dichavador Colmeia Peq.', 'Dichavador',  30, 0, 2, 0, 'images/produtos/dich_colmeia.jpeg','TRUE','FALSE','Colmeia plástico pequeno. Custo-benefício imbatível.'],
-    ['P034','Dichavador Colmeia Grande','Dichavador', 40, 0, 2, 0, 'images/produtos/dicha_colme.jpeg','TRUE','FALSE','Colmeia grande. Corte preciso e durável.'],
-    ['P035','Dichavador Colmeia Metal','Dichavador',  120,0, 1, 0, 'images/catalogo2/p27.jpg',    'TRUE',  'FALSE', 'Alien Dawg — metal premium colmeia, 4 partes com coador. Edição especial.'],
-    ['P036','Pilão Folha Chaveiro',    'Acessório',   16, 0, 3, 0, 'images/catalogo2/p30.jpg',    'TRUE',  'FALSE', 'Mini pilão chaveiro com detalhe de folha. Compacto e estiloso.'],
-    ['P037','Tubeck',                  'Acessório',   10, 0, 3, 0, 'images/catalogo2/p31.jpg',    'TRUE',  'FALSE', 'Tubeck porta-cigarro. Prático para levar sem amassar.'],
-    ['P038','Múltiplos Produtos (combo)','Combo',      0, 0, 0, 0, '',                            'FALSE', 'FALSE', 'Combo de múltiplos produtos.'],
-  ];
-
-  aba.getRange(2, 1, produtos.length, 11).setValues(produtos);
-
-  SpreadsheetApp.getUi().alert(
-    'Produtos cadastrados com sucesso!\n\n' +
-    'Agora ajuste a coluna "estoque_inicial" (coluna G) com a quantidade atual de cada produto.\n' +
-    'Depois publique o script como Web App.'
-  );
+    return `
+    <div class="product-card" data-id="${escHtml(p.id)}">
+      <div class="product-img-wrap">
+        ${imgTag}${placeholder}
+      </div>
+      <div class="product-body">
+        <p class="product-category">${escHtml(p.categoria)}</p>
+        <h3 class="product-name">${escHtml(p.nome)}</h3>
+        <div class="product-footer">
+          <div>
+            <span class="product-price">R$&nbsp;${formatPrice(p.preco)}</span>
+            ${p.precoCombo ? `<span class="product-combo-tag">3 por R$&nbsp;${formatPrice(p.precoCombo)}</span>` : ''}
+          </div>
+          <button class="btn-add ${inCart ? 'added' : ''}"
+                  onclick="addToCart('${escHtml(p.id)}')"
+                  title="Adicionar à sacola"
+                  aria-label="Adicionar ${escHtml(p.nome)} à sacola">
+            ${inCart ? '✓' : '+'}
+          </button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
 }
 
+/* ─────────────────────────────────────────────
+   FILTROS DE CATEGORIA
+   ───────────────────────────────────────────── */
+function renderFilters() {
+  const container = document.getElementById('categoryFilters');
+  const categories = [...new Set(allProducts.map(p => p.categoria))].filter(Boolean);
 
-// ============================================================
-// WEB APP — doGet (leituras do site e do app)
-// ============================================================
-function doGet(e) {
-  var p      = e.parameter || {};
-  var action = p.action   || 'catalogo';
+  container.innerHTML = `<button class="filter-chip active" data-category="todos">Todos</button>`;
+  categories.forEach(cat => {
+    const emoji = CAT_EMOJI[cat] || '•';
+    container.insertAdjacentHTML('beforeend',
+      `<button class="filter-chip" data-category="${escHtml(cat)}">${emoji} ${escHtml(cat)}</button>`
+    );
+  });
+
+  container.querySelectorAll('.filter-chip').forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeCategory = btn.dataset.category;
+      container.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      applyFilters();
+    });
+  });
+}
+
+/* ─────────────────────────────────────────────
+   FILTRO + BUSCA
+   ───────────────────────────────────────────── */
+function applyFilters() {
+  let list = allProducts.filter(p => p.disponivel);
+
+  if (activeCategory !== 'todos') {
+    list = list.filter(p => p.categoria === activeCategory);
+  }
+  if (searchQuery) {
+    const q = searchQuery.toLowerCase();
+    list = list.filter(p =>
+      p.nome.toLowerCase().includes(q) ||
+      (p.categoria || '').toLowerCase().includes(q) ||
+      (p.descricao || '').toLowerCase().includes(q)
+    );
+  }
+
+  renderProducts(list);
+}
+
+/* ─────────────────────────────────────────────
+   RENDER PRODUTOS
+   ───────────────────────────────────────────── */
+function renderProducts(products) {
+  const grid  = document.getElementById('productsGrid');
+  const empty = document.getElementById('emptyState');
+
+  if (!products.length) {
+    grid.innerHTML = '';
+    empty.classList.remove('hidden');
+    return;
+  }
+  empty.classList.add('hidden');
+
+  grid.innerHTML = products.map(p => {
+    const inCart = cart.some(i => i.id === p.id);
+    const emoji  = CAT_EMOJI[p.categoria] || '📦';
+
+    const imgTag = p.imagem
+      ? `<img src="${escHtml(p.imagem)}" alt="${escHtml(p.nome)}" loading="lazy"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+      : '';
+    const placeholder = `<div class="product-img-placeholder" style="display:${p.imagem ? 'none' : 'flex'}">${emoji}</div>`;
+    const badge = p.destaque ? `<span class="product-badge">⭐ Destaque</span>` : '';
+
+    return `
+    <div class="product-card" data-id="${escHtml(p.id)}">
+      <div class="product-img-wrap">
+        ${imgTag}${placeholder}${badge}
+      </div>
+      <div class="product-body">
+        <p class="product-category">${escHtml(p.categoria)}</p>
+        <h3 class="product-name">${escHtml(p.nome)}</h3>
+        ${p.descricao ? `<p class="product-desc">${escHtml(p.descricao)}</p>` : ''}
+        <div class="product-footer">
+          <div>
+            <span class="product-price">R$&nbsp;${formatPrice(p.preco)}</span>
+            ${p.precoCombo ? `<span class="product-combo-tag">3 por R$&nbsp;${formatPrice(p.precoCombo)}</span>` : ''}
+          </div>
+          <button class="btn-add ${inCart ? 'added' : ''}"
+                  onclick="addToCart('${escHtml(p.id)}')"
+                  title="Adicionar à sacola"
+                  aria-label="Adicionar ${escHtml(p.nome)} à sacola">
+            ${inCart ? '✓' : '+'}
+          </button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ─────────────────────────────────────────────
+   CARRINHO
+   ───────────────────────────────────────────── */
+function addToCart(id) {
+  const product = allProducts.find(p => p.id === id);
+  if (!product) return;
+
+  const existing = cart.find(i => i.id === id);
+  if (existing) {
+    existing.qty++;
+  } else {
+    cart.push({ ...product, qty: 1 });
+  }
+
+  saveCart();
+  renderCart();
+  syncCartButtons();
+  openCart();
+  showToast(`✓ ${product.nome} adicionado`);
+}
+
+function removeFromCart(id) {
+  cart = cart.filter(i => i.id !== id);
+  saveCart();
+  renderCart();
+  syncCartButtons();
+}
+
+function updateQty(id, delta) {
+  const item = cart.find(i => i.id === id);
+  if (!item) return;
+  item.qty = Math.max(0, item.qty + delta);
+  if (item.qty === 0) removeFromCart(id);
+  else { saveCart(); renderCart(); }
+}
+
+function calcItemTotal(item) {
+  if (!item.precoCombo || !item.qtdCombo) return item.preco * item.qty;
+  const combos   = Math.floor(item.qty / item.qtdCombo);
+  const avulsos  = item.qty % item.qtdCombo;
+  return combos * item.precoCombo + avulsos * item.preco;
+}
+
+function saveCart() {
+  localStorage.setItem('brisaria_cart', JSON.stringify(cart));
+}
+
+function renderCart() {
+  const itemsEl = document.getElementById('cartItems');
+  const badge   = document.getElementById('cartBadge');
+  const footer  = document.getElementById('cartFooter');
+  const totalEl = document.getElementById('cartTotal');
+
+  const totalQty = cart.reduce((s, i) => s + i.qty, 0);
+  const totalVal = cart.reduce((s, i) => s + calcItemTotal(i), 0);
+
+  if (totalQty > 0) {
+    badge.textContent = totalQty;
+    badge.classList.remove('hidden');
+  } else {
+    badge.classList.add('hidden');
+  }
+
+  if (!cart.length) {
+    footer.style.display = 'none';
+    itemsEl.innerHTML = `
+      <div class="cart-empty">
+        <p>Sua sacola está vazia 🛍️</p>
+        <button class="btn btn-outline-dark btn-sm" onclick="closeCart()">Ver catálogo</button>
+      </div>`;
+    return;
+  }
+
+  footer.style.display = 'block';
+  totalEl.textContent  = `R$ ${formatPrice(totalVal)}`;
+
+  itemsEl.innerHTML = cart.map(item => {
+    const emoji  = CAT_EMOJI[item.categoria] || '📦';
+    const thumb  = item.imagem
+      ? `<img src="${escHtml(item.imagem)}" alt="${escHtml(item.nome)}"
+             onerror="this.outerHTML='${emoji}'">`
+      : emoji;
+
+    return `
+    <div class="cart-item">
+      <div class="cart-item-thumb">${thumb}</div>
+      <div class="cart-item-info">
+        <p class="cart-item-name">${escHtml(item.nome)}</p>
+        <p class="cart-item-unit">R$&nbsp;${formatPrice(item.preco)} cada</p>
+        <div class="cart-item-controls">
+          <button class="qty-btn" onclick="updateQty('${escHtml(item.id)}', -1)" aria-label="Diminuir">−</button>
+          <span class="qty-value">${item.qty}</span>
+          <button class="qty-btn" onclick="updateQty('${escHtml(item.id)}', 1)" aria-label="Aumentar">+</button>
+        </div>
+      </div>
+      <div class="cart-item-right">
+        <span class="cart-item-subtotal">R$&nbsp;${formatPrice(calcItemTotal(item))}</span>
+        <button class="cart-item-remove" onclick="removeFromCart('${escHtml(item.id)}')" aria-label="Remover ${escHtml(item.nome)}">🗑</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function syncCartButtons() {
+  document.querySelectorAll('.product-card[data-id]').forEach(card => {
+    const id     = card.dataset.id;
+    const btn    = card.querySelector('.btn-add');
+    const inCart = cart.some(i => i.id === id);
+    if (btn) {
+      btn.textContent = inCart ? '✓' : '+';
+      btn.classList.toggle('added', inCart);
+    }
+  });
+}
+
+/* ─────────────────────────────────────────────
+   CARRINHO SIDEBAR — abrir / fechar
+   ───────────────────────────────────────────── */
+function openCart() {
+  document.getElementById('cartSidebar').classList.add('open');
+  document.getElementById('cartOverlay').classList.add('visible');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeCart() {
+  document.getElementById('cartSidebar').classList.remove('open');
+  document.getElementById('cartOverlay').classList.remove('visible');
+  document.body.style.overflow = '';
+}
+
+/* ─────────────────────────────────────────────
+   CHECKOUT — WhatsApp
+   ───────────────────────────────────────────── */
+function checkoutWhatsApp() {
+  if (!cart.length) return;
+
+  const lines = cart.map(i => {
+    const sub    = calcItemTotal(i);
+    const combos = i.precoCombo && i.qtdCombo ? Math.floor(i.qty / i.qtdCombo) : 0;
+    const extra  = combos > 0 ? ` (${combos} combo${combos > 1 ? 's' : ''})` : '';
+    return `▪ ${i.nome} (x${i.qty})${extra} — R$ ${formatPrice(sub)}`;
+  });
+  const total = cart.reduce((s, i) => s + calcItemTotal(i), 0);
+
+  const msg = [
+    '🌿 *Olá! Gostaria de fazer um pedido na Brisaria:*',
+    '',
+    ...lines,
+    '',
+    `💰 *Total: R$ ${formatPrice(total)}*`,
+    '',
+    'Pode confirmar disponibilidade e forma de entrega? 😊',
+  ].join('\n');
+
+  window.open(`https://wa.me/${CONFIG.whatsappNumber}?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
+/* ─────────────────────────────────────────────
+   CLUBE DA BRISA — formulário
+   ───────────────────────────────────────────── */
+function setupLoyaltyForm() {
+  const form = document.getElementById('loyaltyForm');
+  if (!form) return;
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const nome      = document.getElementById('loyaltyName').value.trim();
+    const whatsapp  = document.getElementById('loyaltyPhone').value.trim();
+    const email     = document.getElementById('loyaltyEmail').value.trim();
+    const nasc      = document.getElementById('loyaltyBirth').value;
+    const submitBtn = document.getElementById('loyaltySubmitBtn');
+
+    let valid = true;
+    [
+      { el: document.getElementById('loyaltyName'),  val: nome },
+      { el: document.getElementById('loyaltyPhone'), val: whatsapp },
+    ].forEach(({ el, val }) => {
+      if (!val) { el.classList.add('error'); valid = false; }
+      else el.classList.remove('error');
+    });
+    if (!valid) return;
+
+    submitBtn.textContent = 'Cadastrando...';
+    submitBtn.disabled    = true;
+
+    try {
+      if (CONFIG.scriptUrl) {
+        await fetch(CONFIG.scriptUrl, {
+          method: 'POST',
+          body: JSON.stringify({
+            action:      'cadastro_clube',
+            nome,
+            whatsapp,
+            email,
+            nascimento:  nasc,
+          }),
+        });
+      } else {
+        const msg = [
+          '🌿 *Cadastro — Clube da Brisa*',
+          '',
+          `Nome: ${nome}`,
+          `WhatsApp: ${whatsapp}`,
+          email ? `Email: ${email}` : null,
+          nasc  ? `Nascimento: ${formatDate(nasc)}` : null,
+        ].filter(Boolean).join('\n');
+
+        window.open(`https://wa.me/${CONFIG.whatsappNumber}?text=${encodeURIComponent(msg)}`, '_blank');
+      }
+
+      form.classList.add('hidden');
+      document.getElementById('loyaltySuccess').classList.remove('hidden');
+
+    } catch (err) {
+      console.error('Erro no cadastro:', err);
+      submitBtn.textContent = 'Cadastrar no Clube';
+      submitBtn.disabled    = false;
+      showToast('⚠️ Erro ao cadastrar. Tente novamente.');
+    }
+  });
+}
+
+/* ─────────────────────────────────────────────
+   CLUBE DA BRISA — consulta de pontos
+   ───────────────────────────────────────────── */
+function setupPontosConsulta() {
+  const section = document.getElementById('pontosConsultaSection');
+  if (!section) return;
+
+  if (!CONFIG.scriptUrl) {
+    section.style.display = 'none';
+    return;
+  }
+  section.style.display = '';
+}
+
+async function consultarPontos() {
+  const input  = document.getElementById('pontosWhatsApp');
+  const btn    = document.getElementById('pontosConsultarBtn');
+  const result = document.getElementById('pontosResult');
+  const wNum   = normalizarWpp(input.value);
+
+  if (!wNum) {
+    input.classList.add('error');
+    return;
+  }
+  input.classList.remove('error');
+
+  btn.textContent = 'Consultando...';
+  btn.disabled    = true;
+  result.classList.add('hidden');
+  result.innerHTML = '';
 
   try {
-    var result;
-    if      (action === 'catalogo')  result = getCatalogo();
-    else if (action === 'pontos')    result = getPontos(p.w || '');
-    else if (action === 'perfil')    result = getPerfilCliente(p.w || '');
-    else if (action === 'dashboard') result = getDashboard();
-    else if (action === 'historico') result = getHistorico();
-    else if (action === 'estoque')   result = getEstoque();
-    else                             result = { erro: 'Ação inválida' };
-    return _json(result);
+    const res  = await fetch(`${CONFIG.scriptUrl}?action=pontos&w=${wNum}`);
+    const data = await res.json();
+
+    if (data.erro) {
+      result.innerHTML = `<p class="pontos-erro">⚠️ ${escHtml(data.erro)}</p>`;
+    } else {
+      const resgatesHtml = (data.resgates_disponiveis && data.resgates_disponiveis.length)
+        ? `<ul class="resgates-list">${data.resgates_disponiveis.map(r =>
+            `<li><span class="benefit-icon">✦</span>${r.pontos} pts → <strong>${escHtml(r.descricao)}</strong></li>`
+          ).join('')}</ul>`
+        : `<p class="resgates-empty">Continue comprando para chegar lá 🌿</p>`;
+
+      result.innerHTML = `
+        <p class="pontos-nome">Olá, <strong>${escHtml(data.nome)}</strong>! 🌿</p>
+        <div class="pontos-saldo-box">
+          <span class="pontos-saldo-num">${data.saldo}</span>
+          <span class="pontos-saldo-label">pontos</span>
+        </div>
+        <p class="pontos-detalhe">Ganhos: ${data.pontos_ganhos} · Resgatados: ${data.pontos_resgatados}</p>
+        ${data.saldo > 0
+          ? `<div class="pontos-resgates"><p class="resgates-title">Disponível para resgatar:</p>${resgatesHtml}</div>`
+          : resgatesHtml}
+        <p class="pontos-rodape">Para resgatar, fale com a gente no WhatsApp 💬</p>`;
+    }
   } catch (err) {
-    return _json({ erro: err.toString() });
+    result.innerHTML = `<p class="pontos-erro">⚠️ Erro de conexão. Tente novamente.</p>`;
   }
+
+  result.classList.remove('hidden');
+  btn.textContent = 'Consultar pontos';
+  btn.disabled    = false;
 }
 
+/* ─────────────────────────────────────────────
+   EVENT LISTENERS
+   ───────────────────────────────────────────── */
+function setupEventListeners() {
+  document.getElementById('cartBtn').addEventListener('click', openCart);
+  document.getElementById('closeCart').addEventListener('click', closeCart);
+  document.getElementById('cartOverlay').addEventListener('click', closeCart);
+  document.getElementById('checkoutBtn').addEventListener('click', checkoutWhatsApp);
 
-// ============================================================
-// WEB APP — doPost (gravações do app)
-// ============================================================
-function doPost(e) {
+  document.getElementById('accountBtn').addEventListener('click', openAccount);
+  document.getElementById('closeAccount').addEventListener('click', closeAccount);
+  document.getElementById('accountOverlay').addEventListener('click', closeAccount);
+
+  document.getElementById('searchInput').addEventListener('input', e => {
+    searchQuery = e.target.value.trim();
+    applyFilters();
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { closeCart(); closeAccount(); }
+  });
+}
+
+/* ─────────────────────────────────────────────
+   MINHA CONTA — abrir / fechar
+   ───────────────────────────────────────────── */
+function openAccount() {
+  renderAccountPanel();
+  document.getElementById('accountSidebar').classList.add('open');
+  document.getElementById('accountOverlay').classList.add('visible');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeAccount() {
+  document.getElementById('accountSidebar').classList.remove('open');
+  document.getElementById('accountOverlay').classList.remove('visible');
+  document.body.style.overflow = '';
+}
+
+/* ─────────────────────────────────────────────
+   MINHA CONTA — render do painel
+   ───────────────────────────────────────────── */
+function renderAccountBtn() {
+  const dot = document.getElementById('accountDot');
+  if (dot) dot.classList.toggle('hidden', !clienteLogado);
+}
+
+function renderAccountPanel() {
+  const loginEl  = document.getElementById('accountLogin');
+  const perfilEl = document.getElementById('accountPerfil');
+
+  if (!clienteLogado) {
+    loginEl.classList.remove('hidden');
+    perfilEl.classList.add('hidden');
+    document.getElementById('accountPanelTitle').textContent = 'Minha conta 🌿';
+    return;
+  }
+
+  loginEl.classList.add('hidden');
+  perfilEl.classList.remove('hidden');
+  document.getElementById('accountPanelTitle').textContent = 'Olá, ' + clienteLogado.nome.split(' ')[0] + ' 🌿';
+  document.getElementById('perfilNome').textContent   = clienteLogado.nome;
+  document.getElementById('perfilWpp').textContent    = clienteLogado.wpp;
+  document.getElementById('perfilPontos').textContent = clienteLogado.saldo ?? 0;
+  renderHistorico(clienteLogado.historico || []);
+}
+
+function renderHistorico(historico) {
+  const el = document.getElementById('perfilHistorico');
+  if (!historico.length) {
+    el.innerHTML = '<p class="hist-empty">Nenhuma compra registrada ainda.</p>';
+    return;
+  }
+  el.innerHTML = historico.map(h => `
+    <div class="hist-item">
+      <div class="hist-item-top">
+        <span class="hist-produto">${escHtml(h.produto || h._desc || '')}</span>
+        <span class="hist-valor">R$&nbsp;${formatPrice(h.valor || h._valor || 0)}</span>
+      </div>
+      <div class="hist-item-sub">
+        ${formatDate(h.data)}
+        ${h.quantidade ? ` · ${h.quantidade}x` : ''}
+        ${h.pagamento  ? ` · ${escHtml(h.pagamento)}` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ─────────────────────────────────────────────
+   MINHA CONTA — login / logout
+   ───────────────────────────────────────────── */
+async function fazerLogin() {
+  const input  = document.getElementById('loginWhatsApp');
+  const erroEl = document.getElementById('loginErro');
+  const wNum   = normalizarWpp(input.value);
+
+  erroEl.classList.add('hidden');
+
+  if (!wNum) {
+    input.classList.add('error');
+    return;
+  }
+  input.classList.remove('error');
+
+  if (!CONFIG.scriptUrl) {
+    erroEl.textContent = 'Sistema de contas ainda não configurado. Fale com a Brisaria!';
+    erroEl.classList.remove('hidden');
+    return;
+  }
+
+  const btn = document.querySelector('#accountLogin .btn');
+  btn.textContent = 'Buscando...';
+  btn.disabled    = true;
+
   try {
-    var data   = JSON.parse(e.postData.contents);
-    var action = data.action || '';
-    var result;
+    const res  = await fetch(`${CONFIG.scriptUrl}?action=perfil&w=${wNum}`);
+    const data = await res.json();
 
-    if      (action === 'venda')          result = registrarVenda(data);
-    else if (action === 'compra')         result = registrarCompra(data);
-    else if (action === 'saida')          result = registrarSaida(data);
-    else if (action === 'cadastro_clube') result = cadastrarClube(data);
-    else if (action === 'deletar')        result = deletarRegistro(data);
-    else                                  result = { erro: 'Ação inválida' };
-
-    return _json(result);
-  } catch (err) {
-    return _json({ erro: err.toString() });
-  }
-}
-
-
-// ============================================================
-// GRAVAÇÕES
-// ============================================================
-
-function registrarVenda(d) {
-  var ss  = SpreadsheetApp.getActiveSpreadsheet();
-  var aba = ss.getSheetByName(ABA_VENDAS);
-  var id  = Date.now();
-
-  aba.appendRow([
-    id,
-    d.data        || _hoje(),
-    d.produto     || '',
-    parseInt(d.quantidade) || 1,
-    parseFloat(d.valor)    || 0,
-    d.pagamento   || 'Pix',
-    d.cliente     || '',
-    d.clienteWpp  || '',
-    new Date(),
-  ]);
-
-  if (d.clienteWpp) {
-    _adicionarPontos(d.clienteWpp, Math.floor(parseFloat(d.valor) || 0));
-  } else if (d.cliente) {
-    _adicionarPontos(d.cliente, Math.floor(parseFloat(d.valor) || 0));
-  }
-
-  return { ok: true, id: id };
-}
-
-function registrarCompra(d) {
-  var ss  = SpreadsheetApp.getActiveSpreadsheet();
-  var aba = ss.getSheetByName(ABA_COMPRAS);
-  var id  = Date.now();
-
-  aba.appendRow([
-    id,
-    d.data         || _hoje(),
-    d.fornecedor   || '',
-    d.produto      || '',
-    parseInt(d.quantidade)  || 1,
-    parseFloat(d.custoUnit) || 0,
-    parseFloat(d.custoTotal)|| 0,
-    d.obs          || '',
-    new Date(),
-  ]);
-
-  return { ok: true, id: id };
-}
-
-function registrarSaida(d) {
-  var ss  = SpreadsheetApp.getActiveSpreadsheet();
-  var aba = ss.getSheetByName(ABA_SAIDAS);
-  var id  = Date.now();
-
-  aba.appendRow([
-    id,
-    d.data      || _hoje(),
-    d.descricao || '',
-    parseFloat(d.valor) || 0,
-    new Date(),
-  ]);
-
-  return { ok: true, id: id };
-}
-
-function deletarRegistro(d) {
-  var tipo = String(d.tipo || '');
-  var id   = String(d.id   || '');
-  var nomeAba = tipo === 'venda'  ? ABA_VENDAS  :
-                tipo === 'compra' ? ABA_COMPRAS : ABA_SAIDAS;
-
-  var ss  = SpreadsheetApp.getActiveSpreadsheet();
-  var aba = ss.getSheetByName(nomeAba);
-  if (!aba) return { erro: 'Aba não encontrada' };
-
-  var dados = aba.getDataRange().getValues();
-  for (var i = 1; i < dados.length; i++) {
-    if (String(dados[i][0]) === id) {
-      aba.deleteRow(i + 1);
-      return { ok: true };
+    if (data.erro) {
+      erroEl.textContent = data.erro;
+      erroEl.classList.remove('hidden');
+    } else {
+      clienteLogado = { ...data, wpp: input.value.trim() };
+      localStorage.setItem('brisaria_cliente', JSON.stringify(clienteLogado));
+      renderAccountBtn();
+      renderAccountPanel();
+      showToast('Bem-vinda de volta, ' + clienteLogado.nome.split(' ')[0] + '!');
     }
-  }
-  return { erro: 'Registro não encontrado' };
-}
-
-function cadastrarClube(d) {
-  var ss   = SpreadsheetApp.getActiveSpreadsheet();
-  var aba  = ss.getSheetByName(ABA_CLUBE);
-  var dados = aba.getDataRange().getValues();
-  var wNum = _normWpp(d.whatsapp);
-
-  for (var i = 1; i < dados.length; i++) {
-    if (_normWpp(String(dados[i][2])) === wNum) {
-      return { ok: true, ja_cadastrado: true };
-    }
+  } catch {
+    erroEl.textContent = 'Erro de conexão. Tente novamente.';
+    erroEl.classList.remove('hidden');
   }
 
-  var id = Date.now();
-  aba.appendRow([
-    id,
-    d.nome       || '',
-    d.whatsapp   || '',
-    d.email      || '',
-    d.nascimento || '',
-    0,
-    0,
-    new Date(),
-  ]);
-
-  return { ok: true, ja_cadastrado: false };
+  btn.textContent = 'Entrar';
+  btn.disabled    = false;
 }
 
-
-// ============================================================
-// LEITURAS
-// ============================================================
-
-function getCatalogo() {
-  var ss      = SpreadsheetApp.getActiveSpreadsheet();
-  var aba     = ss.getSheetByName(ABA_PRODUTOS);
-  if (!aba || aba.getLastRow() < 2) return [];
-
-  var dados   = aba.getDataRange().getValues();
-  var cab     = dados[0].map(function(c) { return String(c).toLowerCase().trim(); });
-  var vendas  = _todasLinhas(ABA_VENDAS);
-  var compras = _todasLinhas(ABA_COMPRAS);
-
-  return dados.slice(1)
-    .filter(function(row) { return row[1]; })
-    .map(function(row) {
-      var get = function(campo) {
-        var idx = cab.indexOf(campo);
-        return idx >= 0 ? row[idx] : '';
-      };
-
-      var nome        = String(get('nome'));
-      var estoqueIni  = parseInt(get('estoque_inicial')) || 0;
-      var disponivel  = String(get('disponivel')).toUpperCase() !== 'FALSE';
-
-      var comprado = compras
-        .filter(function(c) { return String(c[3]) === nome; })
-        .reduce(function(s, c) { return s + (parseInt(c[4]) || 0); }, 0);
-
-      var vendido = vendas
-        .filter(function(v) { return String(v[2]) === nome; })
-        .reduce(function(s, v) { return s + (parseInt(v[3]) || 0); }, 0);
-
-      var estoqueAtual = estoqueIni + comprado - vendido;
-
-      return {
-        id:         String(get('id')),
-        nome:       nome,
-        categoria:  String(get('categoria')),
-        preco:      parseFloat(get('preco_venda'))  || 0,
-        descricao:  String(get('descricao')),
-        imagem:     String(get('imagem')),
-        disponivel: disponivel && estoqueAtual > 0,
-        destaque:   String(get('destaque')).toUpperCase() === 'TRUE',
-        estoque:    estoqueAtual,
-      };
-    });
+function fazerLogout() {
+  clienteLogado = null;
+  localStorage.removeItem('brisaria_cliente');
+  renderAccountBtn();
+  renderAccountPanel();
+  showToast('Até logo! 🌿');
 }
 
-function getEstoque() {
-  var ss      = SpreadsheetApp.getActiveSpreadsheet();
-  var aba     = ss.getSheetByName(ABA_PRODUTOS);
-  if (!aba || aba.getLastRow() < 2) return [];
-
-  var dados   = aba.getDataRange().getValues();
-  var vendas  = _todasLinhas(ABA_VENDAS);
-  var compras = _todasLinhas(ABA_COMPRAS);
-
-  return dados.slice(1)
-    .filter(function(row) { return row[1]; })
-    .map(function(row) {
-      var nome       = String(row[1]);
-      var estoqueIni = parseInt(row[6]) || 0;
-      var minimo     = parseInt(row[5]) || 0;
-
-      var comprado = compras
-        .filter(function(c) { return String(c[3]) === nome; })
-        .reduce(function(s, c) { return s + (parseInt(c[4]) || 0); }, 0);
-
-      var vendido = vendas
-        .filter(function(v) { return String(v[2]) === nome; })
-        .reduce(function(s, v) { return s + (parseInt(v[3]) || 0); }, 0);
-
-      var atual = estoqueIni + comprado - vendido;
-
-      return {
-        nome:            nome,
-        categoria:       String(row[2]),
-        atual:           atual,
-        minimo:          minimo,
-        estoqueInicial:  estoqueIni,
-      };
-    });
+/* ─────────────────────────────────────────────
+   TOAST NOTIFICATION
+   ───────────────────────────────────────────── */
+let toastTimer = null;
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2600);
 }
 
-function getDashboard() {
-  var vendas  = _todasLinhas(ABA_VENDAS);
-  var compras = _todasLinhas(ABA_COMPRAS);
-  var saidas  = _todasLinhas(ABA_SAIDAS);
-
-  var hoje    = new Date();
-  var mesAtual = hoje.getFullYear() + '-' + _pad(hoje.getMonth() + 1);
-
-  function mesKey(v) {
-    var d = String(v || '');
-    return d.substring(0, 7);
-  }
-
-  var receitaMes   = vendas .filter(function(v) { return mesKey(v[1]) === mesAtual; }).reduce(function(s, v) { return s + (parseFloat(v[4]) || 0); }, 0);
-  var comprasMes   = compras.filter(function(c) { return mesKey(c[1]) === mesAtual; }).reduce(function(s, c) { return s + (parseFloat(c[6]) || 0); }, 0);
-  var receitaTotal = vendas .reduce(function(s, v)  { return s + (parseFloat(v[4]) || 0); }, 0);
-  var comprasTotal = compras.reduce(function(s, c)  { return s + (parseFloat(c[6]) || 0); }, 0);
-  var saidasTotal  = saidas .reduce(function(s, sd) { return s + (parseFloat(sd[3])|| 0); }, 0);
-
-  var ultimasVendas = vendas
-    .slice().sort(function(a, b) { return Number(b[0]) - Number(a[0]); })
-    .slice(0, 8)
-    .map(function(v) {
-      return {
-        id: v[0], data: v[1], produto: v[2],
-        quantidade: v[3], valor: v[4], pagamento: v[5], cliente: v[6],
-      };
-    });
-
-  return {
-    receitaMes:    receitaMes,
-    comprasMes:    comprasMes,
-    resultadoMes:  receitaMes - comprasMes,
-    saldo:         receitaTotal - comprasTotal - saidasTotal,
-    ultimasVendas: ultimasVendas,
-  };
-}
-
-function getHistorico() {
-  var vendas  = _todasLinhas(ABA_VENDAS).map(function(v) {
-    return { id: v[0], data: v[1], _tipo: 'Venda',  _desc: v[2], quantidade: v[3], _valor: v[4], pagamento: v[5], cliente: v[6], _cor: 'green' };
-  });
-  var compras = _todasLinhas(ABA_COMPRAS).map(function(c) {
-    return { id: c[0], data: c[1], _tipo: 'Compra', _desc: c[3], quantidade: c[4], _valor: c[6], fornecedor: c[2], _cor: 'red' };
-  });
-  var saidas  = _todasLinhas(ABA_SAIDAS).map(function(s) {
-    return { id: s[0], data: s[1], _tipo: 'Saída',  _desc: s[2], _valor: s[3], _cor: 'red' };
-  });
-
-  return vendas.concat(compras).concat(saidas)
-    .sort(function(a, b) { return Number(b.id) - Number(a.id); });
-}
-
-function getPontos(w) {
-  if (!w) return { erro: 'WhatsApp não informado' };
-
-  var ss    = SpreadsheetApp.getActiveSpreadsheet();
-  var aba   = ss.getSheetByName(ABA_CLUBE);
-  if (!aba || aba.getLastRow() < 2) return { erro: 'Clube não encontrado' };
-
-  var dados = aba.getDataRange().getValues();
-  var wNum  = _normWpp(w);
-
-  for (var i = 1; i < dados.length; i++) {
-    var row = dados[i];
-    if (_normWpp(String(row[2])) === wNum) {
-      var ganhos     = parseInt(row[5]) || 0;
-      var resgatados = parseInt(row[6]) || 0;
-      var saldo      = ganhos - resgatados;
-
-      var resgates = [];
-      if (saldo >= 100) resgates.push({ pontos: 100, descricao: '1 seda grátis' });
-      if (saldo >= 200) resgates.push({ pontos: 200, descricao: '1 piteira grátis' });
-      if (saldo >= 500) resgates.push({ pontos: 500, descricao: 'R$ 15 de desconto' });
-
-      return {
-        nome:                String(row[1]),
-        saldo:               saldo,
-        pontos_ganhos:       ganhos,
-        pontos_resgatados:   resgatados,
-        resgates_disponiveis: resgates,
-      };
-    }
-  }
-
-  return { erro: 'WhatsApp não encontrado no Clube da Brisa. Cadastre-se primeiro!' };
-}
-
-
-// ============================================================
-// PERFIL DO CLIENTE (login + histórico de compras)
-// ============================================================
-
-function getPerfilCliente(w) {
-  if (!w) return { erro: 'WhatsApp não informado' };
-
-  var ss    = SpreadsheetApp.getActiveSpreadsheet();
-  var clube = ss.getSheetByName(ABA_CLUBE);
-  if (!clube || clube.getLastRow() < 2) return { erro: 'Clube não encontrado' };
-
-  var dados = clube.getDataRange().getValues();
-  var wNum  = _normWpp(w);
-
-  var membroRow = null;
-  for (var i = 1; i < dados.length; i++) {
-    if (_normWpp(String(dados[i][2])) === wNum) {
-      membroRow = dados[i];
-      break;
-    }
-  }
-
-  if (!membroRow) {
-    return { erro: 'WhatsApp não encontrado. Cadastre-se no Clube da Brisa primeiro!' };
-  }
-
-  var ganhos     = parseInt(membroRow[5]) || 0;
-  var resgatados = parseInt(membroRow[6]) || 0;
-  var saldo      = ganhos - resgatados;
-
-  var vendas = _todasLinhas(ABA_VENDAS);
-  var historico = vendas
-    .filter(function(v) {
-      return _normWpp(String(v[7] || '')) === wNum;
-    })
-    .sort(function(a, b) { return Number(b[0]) - Number(a[0]); })
-    .map(function(v) {
-      return {
-        id:         v[0],
-        data:       v[1],
-        produto:    v[2],
-        quantidade: v[3],
-        valor:      v[4],
-        pagamento:  v[5],
-      };
-    });
-
-  var resgates = [];
-  if (saldo >= 5)  resgates.push({ pontos: 5,  descricao: 'Sedinha ou filtro grátis' });
-  if (saldo >= 7)  resgates.push({ pontos: 7,  descricao: 'Kitzinho grátis' });
-  if (saldo >= 10) resgates.push({ pontos: 10, descricao: 'Kit Tabas grátis' });
-  if (saldo >= 15) resgates.push({ pontos: 15, descricao: 'Kit Completo grátis' });
-
-  return {
-    nome:                String(membroRow[1]),
-    saldo:               saldo,
-    pontos_ganhos:       ganhos,
-    pontos_resgatados:   resgatados,
-    resgates_disponiveis: resgates,
-    historico:           historico,
-  };
-}
-
-
-// ============================================================
-// UTILIDADES INTERNAS
-// ============================================================
-
-function _normWpp(v) {
-  var n = String(v || '').replace(/\D/g, '');
-  if (!n) return '';
-  if (n.indexOf('55') !== 0) n = '55' + n;
+/* ─────────────────────────────────────────────
+   HELPERS
+   ───────────────────────────────────────────── */
+function normalizarWpp(valor) {
+  let n = (valor || '').replace(/\D/g, '');
+  if (!n || n.length < 8) return '';
+  if (!n.startsWith('55')) n = '55' + n;
   return n;
 }
 
-function _adicionarPontos(clienteWpp, pontos) {
-  if (!pontos || pontos <= 0) return;
-  var ss  = SpreadsheetApp.getActiveSpreadsheet();
-  var aba = ss.getSheetByName(ABA_CLUBE);
-  if (!aba || aba.getLastRow() < 2) return;
-
-  var dados = aba.getDataRange().getValues();
-  var busca = _normWpp(clienteWpp);
-
-  for (var i = 1; i < dados.length; i++) {
-    if (_normWpp(String(dados[i][2])) === busca) {
-      var atual = parseInt(dados[i][5]) || 0;
-      aba.getRange(i + 1, 6).setValue(atual + pontos);
-      return;
-    }
-  }
+function formatPrice(value) {
+  return Number(value).toFixed(2).replace('.', ',');
 }
 
-function _todasLinhas(nomeAba) {
-  var ss  = SpreadsheetApp.getActiveSpreadsheet();
-  var aba = ss.getSheetByName(nomeAba);
-  if (!aba || aba.getLastRow() < 2) return [];
-  return aba.getRange(2, 1, aba.getLastRow() - 1, aba.getLastColumn()).getValues();
+function formatDate(iso) {
+  if (!iso) return '';
+  const [y, m, d] = iso.split('-');
+  return `${d}/${m}/${y}`;
 }
 
-function _criarAbaSeNaoExistir(ss, nome, cabecalhos) {
-  var aba = ss.getSheetByName(nome);
-  if (!aba) {
-    aba = ss.insertSheet(nome);
-    aba.getRange(1, 1, 1, cabecalhos.length).setValues([cabecalhos]);
-    aba.setFrozenRows(1);
-  }
-  return aba;
-}
-
-function _json(data) {
-  var output = ContentService
-    .createTextOutput(JSON.stringify(data))
-    .setMimeType(ContentService.MimeType.JSON);
-  return output;
-}
-
-function doOptions(e) {
-  return ContentService
-    .createTextOutput('')
-    .setMimeType(ContentService.MimeType.TEXT);
-}
-
-function _hoje() {
-  var d = new Date();
-  return d.getFullYear() + '-' + _pad(d.getMonth() + 1) + '-' + _pad(d.getDate());
-}
-
-function _pad(n) {
-  return n < 10 ? '0' + n : String(n);
+function escHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
 }
