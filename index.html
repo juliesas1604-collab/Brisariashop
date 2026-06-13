@@ -87,6 +87,8 @@
         <span class="account-pontos-label">pontos</span>
       </div>
 
+      <div id="perfilResgates" class="account-resgates"></div>
+
       <div class="account-historico">
         <h4 class="account-hist-title">Histórico de compras</h4>
         <div id="perfilHistorico" class="hist-list"></div>
@@ -203,9 +205,7 @@
       <h3>Sua sacola 🛍️</h3>
       <button class="close-btn" id="closeCart" aria-label="Fechar sacola">✕</button>
     </div>
-    <div class="cart-items" id="cartItems">
-      <!-- preenchido por JS -->
-    </div>
+    <div class="cart-items" id="cartItems"></div>
     <div class="cart-footer" id="cartFooter">
       <div class="cart-summary">
         <div class="cart-total-row">
@@ -357,7 +357,6 @@
     </div>
   </div>
 
-  <!-- Toast notification -->
   <div class="toast" id="toast"></div>
 
   <script src="app.js"></script>
