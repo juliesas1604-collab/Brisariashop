@@ -107,23 +107,7 @@ async function loadCatalog() {
     console.warn('Catálogo ao vivo indisponível, usando dados locais:', err);
   }
 }
-  try {
-    if (!CONFIG.scriptUrl) {
-      allProducts = SAMPLE_PRODUCTS;
-    } else {
-      allProducts = await fetchFromScript();
-    }
-  } catch (err) {
-    console.warn('Erro ao carregar catálogo, usando dados de exemplo:', err);
-    allProducts = SAMPLE_PRODUCTS;
-  }
-
-  loading.classList.add('hidden');
-  renderFeatured();
-  renderFilters();
-  applyFilters();
-}
-
+ 
 async function fetchFromScript() {
   const controller = new AbortController();
   const timeout    = setTimeout(() => controller.abort(), 15000);
