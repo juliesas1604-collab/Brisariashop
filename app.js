@@ -491,17 +491,15 @@ async function resgatarBrinde(pontos, descricao, wpp) {
     clienteLogado.pontos_resgatados = (clienteLogado.pontos_resgatados || 0) + pontos;
     clienteLogado.resgates_disponiveis = (clienteLogado.resgates_disponiveis || []).filter(r => r.pontos !== pontos);
     localStorage.setItem('brisaria_cliente', JSON.stringify(clienteLogado));
-    renderAccountPanel();
+renderAccountPanel();
     showToast('Resgate solicitado! 🎉');
+    const nome = clienteLogado.nome.split(' ')[0];
+    const msg  = `🎁 *Resgate — Clube da Brisa*\n\nCliente: ${nome}\nWhatsApp: ${wpp}\nResgate: ${descricao} (${pontos} pontos)`;
+    window.open(`https://wa.me/${CONFIG.whatsappNumber}?text=${encodeURIComponent(msg)}`, '_blank');
   } catch {
     showToast('⚠️ Erro ao resgatar. Tente novamente.');
-    return;
   }
-  const nome = clienteLogado.nome.split(' ')[0];
-  const msg  = `🎁 *Resgate — Clube da Brisa*\n\nCliente: ${nome}\nWhatsApp: ${wpp}\nResgate: ${descricao} (${pontos} pontos)`;
-  window.open(`https://wa.me/${CONFIG.whatsappNumber}?text=${encodeURIComponent(msg)}`, '_blank');
 }
-
 function renderHistorico(historico) {
   const el = document.getElementById('perfilHistorico');
   if (!historico.length) { el.innerHTML = '<p class="hist-empty">Nenhuma compra registrada ainda.</p>'; return; }
