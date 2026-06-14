@@ -1393,6 +1393,9 @@ a { color: inherit; }
   display: flex;
   flex-direction: column;
   gap: 0;
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .account-card {
@@ -1505,17 +1508,4 @@ a { color: inherit; }
   color: var(--verde-med);
   margin-top: 2px;
   letter-spacing: 0.1px;
-}
-
-@media (min-width: 700px) {
-  .product-modal {
-    max-width: 460px;
-    left: 50%;
-    right: auto;
-    transform: translateX(-50%);
-    border-radius: 20px;
-    bottom: auto;
-    top: 50%;
-    margin-top: -230px;
-  }
 }
