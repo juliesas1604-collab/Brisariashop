@@ -1288,6 +1288,19 @@ a { color: inherit; }
   width: 48px; height: 48px; font-size: 22px;
 }
 
+@media (min-width: 700px) {
+  .product-modal {
+    max-width: 460px;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    border-radius: 20px;
+    bottom: auto;
+    top: 50%;
+    margin-top: -230px;
+  }
+}
+
 /* ================================================
    RESPONSIVE
    ================================================ */
